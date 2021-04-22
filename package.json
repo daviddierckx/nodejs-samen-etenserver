@@ -1,0 +1,18 @@
+{
+  "name": "nodejs-samen-eten-server",
+  "version": "1.0.0",
+  "description": "node js server samen eten",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "start": "node server.js"
+  },
+  "author": "David Dierckx",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

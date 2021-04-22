@@ -9,7 +9,7 @@ const server = http.createServer((req, res) => {
         'status': 'Alles OK!'
     }
   res.statusCode = 200
-  res.setHeader('Content-Type', 'text/html')
+  res.setHeader('Content-Type', 'application/json')
   res.end(JSON.stringify(result))
 })
 

@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000
 
-app.get('/', (req, res) => {
+app.get('/api/info', (req, res) => {
   console.log("Get request op /api/info")
   
   const info = {

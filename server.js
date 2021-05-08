@@ -1,12 +1,16 @@
 const express = require('express')
 const app = express()
 const database = require('./database')
+const studenthome = require('./routes/studenthome.routes')
 
 var logger = require('tracer').console()
 
 console.log(database.db)
 
 const port = process.env.PORT || 3000
+
+//Instal the routes
+app.use("/api",studenthome)
 
 app.get('/api/info', (req, res) => {
   logger.log("Get request op /api/info")

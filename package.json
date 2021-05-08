@@ -16,5 +16,14 @@
   "dependencies": {
     "express": "^4.17.1",
     "tracer": "^1.1.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/daviddierckx/nodejs-samen-etenserver.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://gitlab.com/daviddierckx/nodejs-samen-etenserver/issues"
+  },
+  "homepage": "https://gitlab.com/daviddierckx/nodejs-samen-etenserver#readme"
 }

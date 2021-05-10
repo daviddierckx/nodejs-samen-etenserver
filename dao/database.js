@@ -59,5 +59,15 @@ module.exports = {
         setTimeout(() => {
             callback(undefined, db);
           }, timeout);
-    }
+    },
+    getMealDetails:(callback)=>{
+        setTimeout(() => {
+            callback(undefined, db);
+          }, timeout);
+    },
+    deleteMealDetails:(callback)=>{
+        setTimeout(() => {
+            callback(undefined, db);
+          }, timeout);
+    },
 }

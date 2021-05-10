@@ -94,5 +94,54 @@ module.exports = {
                 })
             }
         })
+    },
+    mealDetails:(req,res,next)=>{
+        console.log("meal.controller.mealDetails called");
+        let mealList = []
+
+        objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
+        
+        for (i = 0; i < database.db[objIndex].meal.length; i++) {
+            if(database.db[objIndex].meal[i].mealId == req.params.mealId){
+                mealList.push({meal:database.db[objIndex].meal[i]});
+                console.log(database.db[objIndex].meal[i].naam)
+
+            }
+          }
+        
+        database.getMealDetails((err, result)=>{
+            if(err){
+                next(err)
+            }
+            if(result){
+                res.status(200).json({
+                    status: "succes",
+                    result: mealList
+                })
+            }
+        })
+    },
+    mealDelete:(req,res,next)=>{
+        console.log("meal.controller.mealDelete called");
+
+        objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
+        mealIndex = database.db[objIndex].meal.findIndex((obj => obj.mealId == req.params.mealId))
+        
+        var ar = database.db[objIndex].meal
+        ar.splice(mealIndex,1)
+        
+
+        database.deleteMealDetails((err,result)=>{
+            if(err){
+                next(err)
+            }
+            if(result){
+                console.log( "Delete succes" );
+                res.status(200).json({
+                    status:'succes',
+                    result: result
+                })
+            }
+        })
     }
 }

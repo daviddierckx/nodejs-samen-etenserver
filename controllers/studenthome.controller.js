@@ -42,7 +42,7 @@ module.exports = {
               values.place != '' && values.telephone_number != ''){
                   if(err){
                       console.log("error adding studenthome",values)
-
+                        next(err)
                   }
                   if(result){
                       res.status(200).json({status: "succes",result:result})
@@ -85,17 +85,16 @@ module.exports = {
    getOne:(req,res,next)=>{
     console.log("studenthome.controller.getOne called");
 
-    const picked = database.db.filter(function(value){
-        return value.homeId == req.params.homeId
-    })
-    database.getOne(picked,(err,result)=>{
+    objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
+
+    database.getOne(objIndex,(err,result)=>{
         if(err){
             next(err)
         }
         if(result){
             res.status(200).json({
                 status: "succes",
-                result: picked
+                result: result
             })
         }
     })

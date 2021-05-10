@@ -21,9 +21,9 @@ module.exports = {
             callback(undefined, db);
           }, timeout);
     },
-    getOne:(item,callback)=>{
+    getOne:(index,callback)=>{
         setTimeout(() => {
-            callback(undefined, item);
+            callback(undefined, db[index]);
           }, timeout);
     },
     delete:(item,callback)=>{

@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const database = require('./dao/database')
 const studenthome = require('./routes/studenthome.routes')
+const meals = require('./routes/meal.routes')
 
 var logger = require('tracer').console()
 
@@ -11,6 +12,7 @@ const port = process.env.PORT || 3000
 
 //Instal the routes
 app.use("/api",studenthome)
+app.use("/api",meals)
 
 app.get('/api/info', (req, res) => {
   logger.log("Get request op /api/info")

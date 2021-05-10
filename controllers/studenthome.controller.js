@@ -34,7 +34,8 @@ module.exports = {
               'postal_code': postalcode,
               'place': place,
               'telephone_number': telephoneNumber,
-              'user':[]
+              'user':[],
+              'meal':[]
           }
           database.add(values,(err,result)=>{
           if(values.name != '' && values.street != ''&&
@@ -54,9 +55,9 @@ module.exports = {
     },
     updateOne:(req,res,next)=>{
         console.log("studenthome.controller.updateOne called");
+        
 
         objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
-
 
         //Log object to Console.
         console.log("Before update: ", database.db[objIndex])

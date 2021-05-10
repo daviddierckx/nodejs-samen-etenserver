@@ -1,6 +1,6 @@
-const e = require('express')
 const express = require('express')
 const controller = require('../controllers/studenthome.controller')
+
 
 
 const app  = express()

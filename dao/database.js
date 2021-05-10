@@ -1,6 +1,7 @@
 let db = []
 let timeout = 800
 let lastInsertedIndex = 0;
+let lastInsertedMealIndex = 0;
 
 module.exports = {
     db,
@@ -23,7 +24,8 @@ module.exports = {
     },
     getOne:(index,callback)=>{
         setTimeout(() => {
-            callback(undefined, db[index]);
+            callback(undefined, db[index])
+            console.log(db);
           }, timeout);
     },
     delete:(item,callback)=>{
@@ -34,6 +36,26 @@ module.exports = {
     },
     addUser:(index,callback)=>{
         db[index].user.push("David")
+        setTimeout(() => {
+            callback(undefined, db);
+          }, timeout);
+    },
+    addMeal:(item,index,callback)=>{
+        setTimeout(() => {
+            try{
+                db[index].meal.push(item)
+            }catch(err){
+               console.log('Unable to create meal')
+            }
+            callback(undefined, db);
+          }, timeout);
+    },
+    updateMeal:(callback)=>{
+        setTimeout(() => {
+            callback(undefined, db);
+          }, timeout);
+    },
+    getAllMeal:(callback)=>{
         setTimeout(() => {
             callback(undefined, db);
           }, timeout);

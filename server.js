@@ -27,3 +27,5 @@ app.get('/api/info', (req, res) => {
 app.listen(port, () => {
   logger.log(`Example app listening at :${port}`)
 })
+
+module.exports = app;

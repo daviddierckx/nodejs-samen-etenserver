@@ -31,5 +31,11 @@ module.exports = {
         setTimeout(() => {
             callback(undefined, db);
           }, timeout);
+    },
+    addUser:(index,callback)=>{
+        db[index].user.push("David")
+        setTimeout(() => {
+            callback(undefined, db);
+          }, timeout);
     }
 }

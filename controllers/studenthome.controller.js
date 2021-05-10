@@ -3,7 +3,7 @@ const database = require('../dao/database')
 
 module.exports = {
     getAll: (req,res,next)=>{
-        console.log("moviecontroller.getAll called");
+        console.log("studenthome.controller.getAll called");
         database.getAll((err, result)=>{
             if(err){
                 next(err)
@@ -17,6 +17,8 @@ module.exports = {
         })
     },
     createOne:(req,res,next)=>{
+        console.log("studenthome.controller.createOne called");
+
         const name = req.body.name
         const street = req.body.street
         const houseNumber = req.body.houseNumber
@@ -31,7 +33,8 @@ module.exports = {
               'house_number': houseNumber,
               'postal_code': postalcode,
               'place': place,
-              'telephone_number': telephoneNumber
+              'telephone_number': telephoneNumber,
+              'user':[]
           }
           database.add(values,(err,result)=>{
           if(values.name != '' && values.street != ''&&
@@ -50,6 +53,8 @@ module.exports = {
             })
     },
     updateOne:(req,res,next)=>{
+        console.log("studenthome.controller.updateOne called");
+
         objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
 
 
@@ -78,6 +83,8 @@ module.exports = {
         })
     },
    getOne:(req,res,next)=>{
+    console.log("studenthome.controller.getOne called");
+
     const picked = database.db.filter(function(value){
         return value.homeId == req.params.homeId
     })
@@ -94,9 +101,26 @@ module.exports = {
     })
    },
    delete:(req,res,next)=>{
+    console.log("studenthome.controller.delete called");
+
         objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
         
         database.delete(objIndex,(err,result)=>{
+            if(err){
+                next(err)
+            }
+            if(result){
+                res.status(200).json({
+                    status:'succes',
+                    result: result
+                })
+            }
+        })
+   },
+   addUser:(req,res,next)=>{
+        objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
+        
+        database.addUser(objIndex,(err,result)=>{
             if(err){
                 next(err)
             }

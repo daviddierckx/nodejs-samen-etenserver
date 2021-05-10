@@ -18,6 +18,7 @@ app.post('/studenthome',controller.createOne)
 app.put('/studenthome/:homeId',controller.updateOne)
 //Delete one
 app.delete('/studenthome/:homeId',controller.delete)
-
+//Add user
+app.put('/studenthome/:homeId/user',controller.addUser)
 
 module.exports = app;

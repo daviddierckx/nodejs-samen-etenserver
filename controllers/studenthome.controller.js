@@ -39,19 +39,16 @@ module.exports = {
               'meal':[]
           }
           database.add(values,(err,result)=>{
-          if(values.name != '' && values.street != ''&&
-              values.house_number != '' && values.postal_code != ''&&
-              values.place != '' && values.telephone_number != ''){
-                  if(err){
-                      console.log("error adding studenthome",values)
-                        next(err)
-                  }
-                  if(result){
-                      res.status(201).json({status: "succes",result:result})
-                  }
-              }else{
-                  res.send('Please make sure all fields are filled in correctly.')
-              }
+            if((values.postal_code.length !== 6 || values.telephone_number.length !== 10)
+             || name === undefined || street === undefined || houseNumber === undefined || place === undefined){
+                return res.status(400).send("Failed to post, Invalid input")
+            }
+            if(result){
+                res.status(201).json({
+                    status: "succes",
+                    result: result
+                })
+            }
             })
     },
     updateOne:(req,res,next)=>{
@@ -75,10 +72,11 @@ module.exports = {
         console.log("After update: ", database.db[objIndex])
         
         database.update((err, result)=>{
-            if(err){
-                console.log("error updating studenthome",values)
-
-            }
+            if((database.db[objIndex].postalcode.length !== 6 || database.db[objIndex].telephoneNumber.length !== 10)
+            || database.db[objIndex].name === undefined || database.db[objIndex].street === undefined || 
+            database.db[objIndex].houseNumber === undefined || database.db[objIndex].place === undefined){
+               return res.status(400).send("Failed to put, Invalid input")
+           }
             if(result){
                 res.status(200).json({status: "succes",result:result})
             }
@@ -106,10 +104,11 @@ module.exports = {
     console.log("studenthome.controller.delete called");
 
         objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
-        
+        const home = database.db.find(home => home.homeId === parseInt(req.params.homeId))
+
         database.delete(objIndex,(err,result)=>{
-            if(err){
-                next(err)
+            if(!home){
+                return res.status(404).send("The home with the provided ID does not exist")
             }
             if(result){
                 res.status(200).json({

@@ -2,6 +2,7 @@ const { expect } = require('chai')
 let chai = require('chai')
 let chaiHttp = require('chai-http')
 const { response } = require('express')
+const res = require('express/lib/response')
 let server = require('../server')
 
 //Assertion Style
@@ -93,16 +94,49 @@ describe('Studenthome API', () =>{
     //test post
     describe("POST /api/studenthome",()=>{
       it("It schould POST a studenthome",(done)=>{
+        const data = {
+          "homeId": 12345,
+          "name":"avans",
+          "street": "Lovendijkstraat",
+          "houseNumber": "14",
+          "postalcode": "AB3232",
+          "place": "Breda",
+          "telephoneNumber": "0488367478",
+          "user": [],
+          "meal": []
+      }
         chai.request(server)
           .post("/api/studenthome")
+          .send(data)
           .end((err, response)=>{
             response.should.have.status(201)
             response.body.status.should.be.a('string')
             response.body.should.be.a('object')
             response.body.result[0].should.have.property('postal_code')
             response.body.result[0].postal_code.should.have.lengthOf(6);
-            // response.body.result.should.have.property('telephone_number')
-            // response.body.result.telephone_number.should.have.lengthOf(10);
+            response.body.result[0].should.have.property('telephone_number')
+            response.body.result[0].telephone_number.should.have.lengthOf(10);
+            done()
+          })
+      })
+      it("It schould NOT POST a studenthome",(done)=>{
+        const data = {
+          "homeId": 12345,
+          "name":"avans",
+          "street": "Lovendijkstraat",
+          "houseNumber": "14",
+          "postalcode": "AB32",
+          "place": "Breda",
+          "telephoneNumber": "0488367478",
+          "user": [],
+          "meal": []
+      }
+        chai.request(server)
+          .post("/api/studenthome")
+          .send(data)
+          .end((err, response)=>{
+            response.should.have.status(400)
+            response.text.should.be.eq("Failed to post, Invalid input")
             done()
           })
       })
@@ -110,7 +144,74 @@ describe('Studenthome API', () =>{
 
 
     //test put
-
+    describe("PUT /api/studenthome/:homeId",()=>{
+      it("It schould PUT a studenthome",(done)=>{
+        const homeId = 0;
+        const data = {
+          "name":"avans Changed",
+          "street": "Lovendijkstraat",
+          "houseNumber": "1000",
+          "postalcode": "AB3232",
+          "place": "Breda",
+          "telephoneNumber": "0488367478"
+      }
+        chai.request(server)
+          .put("/api/studenthome/"+homeId)
+          .send(data)
+          .end((err, response)=>{
+            response.should.have.status(200)
+            response.body.status.should.be.a('string')
+            response.body.result.should.be.a('array')
+            response.body.result[0].should.have.property('name').eq("avans Changed")
+            response.body.result[0].should.have.property('postal_code')
+            response.body.result[0].postal_code.should.have.lengthOf(6);
+            response.body.result[0].should.have.property('telephone_number')
+            response.body.result[0].telephone_number.should.have.lengthOf(10);
+            done()
+          })
+      })
+      it("It schould NOT PUT a studenthome with a postcalcode with less then 6 character \n or telephoneNumber with less then 10",(done)=>{
+        const homeId = 0;
+        const data = {
+          "name":"avans Changed",
+          "street": "Lovendijkstraat",
+          "houseNumber": "1000",
+          "postalcode": "AB32",
+          "place": "Breda",
+          "telephoneNumber": "0488367478"
+      }
+        chai.request(server)
+          .put("/api/studenthome/"+homeId)
+          .send(data)
+          .end((err, response)=>{
+            response.should.have.status(400)
+            response.text.should.be.eq("Failed to put, Invalid input")
+            done()
+          })
+          
+      })
+    })
 
     //test delete
+    describe("DELETE /api/studenthome/:homeId",()=>{
+      it("It schould DELETE a studenthome",(done)=>{
+        const homeId = 0;
+        chai.request(server)
+          .delete("/api/studenthome/"+homeId)
+          .end((err, response)=>{
+            response.should.have.status(200)
+            done()
+          })
+      })
+      it("It schould DELETE a studenthome",(done)=>{
+        const homeId = 12345;
+        chai.request(server)
+          .delete("/api/studenthome/"+homeId)
+          .end((err, response)=>{
+            response.should.have.status(404)
+            response.text.should.be.eq("The home with the provided ID does not exist")
+            done()
+          })
+      })
+    })
 })

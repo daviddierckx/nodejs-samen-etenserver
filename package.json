@@ -4,7 +4,7 @@
   "description": "node js server samen eten",
   "main": "server.js",
   "scripts": {
-    "test": "mocha && exit 0",
+    "test": "mocha && exit 1",
     "start": "node server.js",
     "start-dev": "nodemon server.js"
   },

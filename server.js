@@ -19,7 +19,7 @@ app.get('/api/info', (req, res) => {
     Studentnaam: 'David Dierckx',
     Studentnummer: '2179946',
     Beschrijving: 'Avans hogeschool',
-    SonarqubeURL: ''
+    SonarqubeURL: 'https://sonarqube.avans-informatica-breda.nl/dashboard?id=nodejs-sameneten'
   }
   res.status(200).json(info)
 })

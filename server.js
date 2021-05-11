@@ -25,7 +25,11 @@ app.get('/api/info', (req, res) => {
   }
   res.status(200).json(info)
 })
-
+// Catch-all route
+app.all("*", (req, res, next) => {
+  console.log("Catch-all endpoint aangeroepen");
+  next({ message: "Endpoint '" + req.url + "' does not exist", errCode: 401 });
+});
 app.listen(port, () => {
   logger.log(`Example app listening at :${port}`)
 })

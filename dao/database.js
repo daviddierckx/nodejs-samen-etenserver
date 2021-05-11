@@ -11,12 +11,12 @@ let db = [{
 },
 {
     "homeId": 1,
-    "name": "a",
-    "street": "e",
+    "name": "Thuis",
+    "street": "Zwaluwlaan",
     "house_number": "1",
-    "postal_code": "29",
-    "place": "3",
-    "telephone_number": "04",
+    "postal_code": "AB2323",
+    "place": "Brecht",
+    "telephone_number": "0488367478",
     "user": [],
     "meal": []
 }]

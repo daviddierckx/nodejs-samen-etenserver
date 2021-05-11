@@ -57,7 +57,7 @@ describe('Studenthome API', () =>{
   })
     //Test get by id
     describe("GET /api/studenthome",()=>{
-      it("It schould GET a studenthome by id",(done)=>{
+      it("It should GET a studenthome by id",(done)=>{
         const homeId = 0
 
         chai.request(server)
@@ -79,7 +79,7 @@ describe('Studenthome API', () =>{
             done()
           })
       })
-      it("It schould NOT GET a studenthome by id",(done)=>{
+      it("It should NOT GET a studenthome by id",(done)=>{
         const homeId = 1000
 
         chai.request(server)
@@ -93,7 +93,7 @@ describe('Studenthome API', () =>{
     })
     //test post
     describe("POST /api/studenthome",()=>{
-      it("It schould POST a studenthome",(done)=>{
+      it("It should POST a studenthome",(done)=>{
         const data = {
           "homeId": 12345,
           "name":"avans",
@@ -119,7 +119,7 @@ describe('Studenthome API', () =>{
             done()
           })
       })
-      it("It schould NOT POST a studenthome",(done)=>{
+      it("It should NOT POST a studenthome",(done)=>{
         const data = {
           "homeId": 12345,
           "name":"avans",
@@ -145,7 +145,7 @@ describe('Studenthome API', () =>{
 
     //test put
     describe("PUT /api/studenthome/:homeId",()=>{
-      it("It schould PUT a studenthome",(done)=>{
+      it("It should PUT a studenthome",(done)=>{
         const homeId = 0;
         const data = {
           "name":"avans Changed",
@@ -170,7 +170,7 @@ describe('Studenthome API', () =>{
             done()
           })
       })
-      it("It schould NOT PUT a studenthome with a postcalcode with less then 6 character \n or telephoneNumber with less then 10",(done)=>{
+      it("It should NOT PUT a studenthome with a postcalcode with less then 6 character \n or telephoneNumber with less then 10",(done)=>{
         const homeId = 0;
         const data = {
           "name":"avans Changed",
@@ -194,7 +194,7 @@ describe('Studenthome API', () =>{
 
     //test delete
     describe("DELETE /api/studenthome/:homeId",()=>{
-      it("It schould DELETE a studenthome",(done)=>{
+      it("It should DELETE a studenthome",(done)=>{
         const homeId = 0;
         chai.request(server)
           .delete("/api/studenthome/"+homeId)
@@ -203,7 +203,7 @@ describe('Studenthome API', () =>{
             done()
           })
       })
-      it("It schould DELETE a studenthome",(done)=>{
+      it("It should DELETE a studenthome",(done)=>{
         const homeId = 12345;
         chai.request(server)
           .delete("/api/studenthome/"+homeId)

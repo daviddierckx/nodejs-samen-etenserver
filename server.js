@@ -6,8 +6,6 @@ const meals = require('./routes/meal.routes')
 
 var logger = require('tracer').console()
 
-console.log(database.db)
-
 const port = process.env.PORT || 3000
 
 //Instal the routes
@@ -28,7 +26,7 @@ app.get('/api/info', (req, res) => {
 // Catch-all route
 app.all("*", (req, res, next) => {
   console.log("Catch-all endpoint aangeroepen");
-  next({ message: "Endpoint '" + req.url + "' does not exist", errCode: 401 });
+  next({ message: "Endpoint '" + req.url + "' does not exist", errCode: 404 });
 });
 app.use((error, req, res, next) => {
   console.log("Errorhandler called! ", error);

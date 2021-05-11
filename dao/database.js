@@ -46,7 +46,6 @@ module.exports = {
     getOne:(index,callback)=>{
         setTimeout(() => {
             callback(undefined, db[index])
-            console.log(db);
           }, timeout);
     },
     delete:(item,callback)=>{

@@ -33,7 +33,7 @@ testing:
   script:
     - npm i -D mocha
     - npm run test
-
+    - npm run sonar
 #
 # Deploy to Heroku
 # DPL is a deploy tool made for continuous deployment that’s developed and used

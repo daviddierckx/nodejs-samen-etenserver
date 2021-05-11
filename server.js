@@ -1,8 +1,8 @@
 const express = require('express')
 const app = express()
-const database = require('./dao/database')
-const studenthome = require('./routes/studenthome.routes')
-const meals = require('./routes/meal.routes')
+const database = require('./src/dao/database')
+const studenthome = require('./src/routes/studenthome.routes')
+const meals = require('./src/routes/meal.routes')
 
 var logger = require('tracer').console()
 

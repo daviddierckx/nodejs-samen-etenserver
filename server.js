@@ -30,6 +30,13 @@ app.all("*", (req, res, next) => {
   console.log("Catch-all endpoint aangeroepen");
   next({ message: "Endpoint '" + req.url + "' does not exist", errCode: 401 });
 });
+app.use((error, req, res, next) => {
+  console.log("Errorhandler called! ", error);
+  res.status(error.errCode).json({
+    error: "Some error occurred",
+    message: error.message,
+  });
+});
 app.listen(port, () => {
   logger.log(`Example app listening at :${port}`)
 })

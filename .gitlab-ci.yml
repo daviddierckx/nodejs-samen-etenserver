@@ -32,7 +32,7 @@ testing:
   image: node:latest
   script:
     - npm i -D mocha
-    - npm run test --exit
+    - npm run test
 
 #
 # Deploy to Heroku

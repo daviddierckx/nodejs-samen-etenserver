@@ -8,7 +8,7 @@ const app  = express()
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 //Read ALL +
-app.get('/',controller.getAll)
+app.get('/studenthome',controller.getAll)
 
 //Read One UC203 +
 app.get('/studenthome/:homeId',controller.getOne)

@@ -1,6 +1,27 @@
-let db = []
+let db = [{
+    "homeId": 0,
+    "name": "Avans",
+    "street": "Lovendijkstraat",
+    "house_number": "14",
+    "postal_code": "AB2932",
+    "place": "Breda",
+    "telephone_number": "0488367478",
+    "user": [],
+    "meal": []
+},
+{
+    "homeId": 1,
+    "name": "a",
+    "street": "e",
+    "house_number": "1",
+    "postal_code": "29",
+    "place": "3",
+    "telephone_number": "04",
+    "user": [],
+    "meal": []
+}]
 let timeout = 800
-let lastInsertedIndex = 0;
+let lastInsertedIndex = db.length;
 let lastInsertedMealIndex = 0;
 
 module.exports = {

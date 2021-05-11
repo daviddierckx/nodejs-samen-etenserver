@@ -1,4 +1,5 @@
 
+const { response } = require('express');
 const database = require('../dao/database')
 
 module.exports = {
@@ -46,7 +47,7 @@ module.exports = {
                         next(err)
                   }
                   if(result){
-                      res.status(200).json({status: "succes",result:result})
+                      res.status(201).json({status: "succes",result:result})
                   }
               }else{
                   res.send('Please make sure all fields are filled in correctly.')
@@ -87,10 +88,11 @@ module.exports = {
     console.log("studenthome.controller.getOne called");
 
     objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
+    const home = database.db.find(home => home.homeId === parseInt(req.params.homeId))
 
     database.getOne(objIndex,(err,result)=>{
-        if(err){
-            next(err)
+        if(!home){
+            return res.status(404).send("The home with the provided ID does not exist")
         }
         if(result){
             res.status(200).json({

@@ -3,6 +3,7 @@ const app = express()
 const database = require('./src/dao/database')
 const studenthome = require('./src/routes/studenthome.routes')
 const meals = require('./src/routes/meal.routes')
+const pool = require('./src/dao/database')
 
 var logger = require('tracer').console()
 

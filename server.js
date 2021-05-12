@@ -1,25 +1,9 @@
 const express = require('express')
 const app = express()
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-const database = require('./src/dao/database')
-const studenthome = require('./src/routes/studenthome.routes')
-const meals = require('./src/routes/meal.routes')
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
-const database = require('./database')
-=======
 const database = require('./src/dao/database')
 const studenthome = require('./src/routes/studenthome.routes')
 const meals = require('./src/routes/meal.routes')
 const pool = require('./src/dao/database')
->>>>>>> Stashed changes
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 var logger = require('tracer').console()
 

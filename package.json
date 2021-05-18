@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha -reporter spec test/**/*.test.js --exit",
     "coverage": "nyc --reporter=lcov npm run test",
-    "sonar": "sonar-scanner"
+    "sonar": "sonar-scanner",
+    "start": "nodemon server.js"
   },
   "author": "David Dierckx",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "sonarqube-scanner": "^2.8.0"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
     "tracer": "^1.1.4"
@@ -31,5 +33,8 @@
   "bugs": {
     "url": "https://gitlab.com/daviddierckx/nodejs-samen-etenserver/issues"
   },
-  "homepage": "https://gitlab.com/daviddierckx/nodejs-samen-etenserver#readme"
+  "homepage": "https://gitlab.com/daviddierckx/nodejs-samen-etenserver#readme",
+  "directories": {
+    "test": "test"
+  }
 }

@@ -1,6 +1,11 @@
+const controller = require('../controllers/user.controller')
+console.log("working "+controller.array[0])
+
 const express = require('express')
 const {createUser, getUsersByUserId, getUsers,login} = require('../controllers/user.controller')
+
 const { checkToken } = require("../../auth/token_validation")
+
 
 
 
@@ -13,5 +18,6 @@ app.post('/register',checkToken, createUser)
 app.get('/register',checkToken, getUsers)
 app.get('/register/:id',checkToken, getUsersByUserId)
 app.post('/login',login)
+
 
 module.exports = app;

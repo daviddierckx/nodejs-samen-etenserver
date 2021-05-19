@@ -3,21 +3,8 @@ const { response } = require('express');
 const database = require('../dao/database')
 const mysql = require('mysql')
 const bodyparser = require('body-parser')
+const mysqlConnection = require('../dao/database')
 
-var mysqlConnection = mysql.createConnection({
-    host:'localhost',
-    user: 'root',
-    password: '',
-    database: 'studenthome',
-    multipleStatements: true
-})
-
-mysqlConnection.connect((err)=>{
-    if(!err)
-    console.log('DB connection succeeded')
-    else
-    console.log('DB connection failed \n Error : '+ JSON.stringify(err,undefined,2))
-})
 
 module.exports = {
     getAll: (req,res,next)=>{
@@ -34,17 +21,6 @@ module.exports = {
                 next(err)
             }
         })
-        // database.getAll((err, result)=>{
-        //     if(err){
-        //         next(err)
-        //     }
-        //     if(result){
-        //         res.status(200).json({
-        //             status: "succes",
-        //             result: result
-        //         })
-        //     }
-        // })
     },
     createOne:(req,res,next)=>{
         console.log("studenthome.controller.createOne called");
@@ -94,7 +70,6 @@ module.exports = {
     console.log("studenthome.controller.getOne called");
     mysqlConnection.query("SELECT * FROM studenthome WHERE ID = "+req.params.homeId,(err,rows,fields)=>{
         if(!err && rows.length > 0){
-            console.log(rows)
             res.status(200).json({
                     status:'succes',
                     result: rows
@@ -104,20 +79,6 @@ module.exports = {
             res.status(404).send("The home with the provided ID does not exist")
         }
     })
-    // objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
-    // const home = database.db.find(home => home.homeId === parseInt(req.params.homeId))
-
-    // database.getOne(objIndex,(err,result)=>{
-    //     if(!home){
-    //         return res.status(404).send("The home with the provided ID does not exist")
-    //     }
-    //     if(result){
-    //         res.status(200).json({
-    //             status: "succes",
-    //             result: result
-    //         })
-    //     }
-    // })
    },
    delete:(req,res,next)=>{
     console.log("studenthome.controller.delete called");
@@ -130,20 +91,6 @@ module.exports = {
             res.status(404).send("The home with the provided ID does not exist")
         }
     })
-    //     objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
-    //     const home = database.db.find(home => home.homeId === parseInt(req.params.homeId))
-
-    //     database.delete(objIndex,(err,result)=>{
-    //         if(!home){
-    //             return res.status(404).send("The home with the provided ID does not exist")
-    //         }
-    //         if(result){
-    //             res.status(200).json({
-    //                 status:'succes',
-    //                 result: result
-    //             })
-    //         }
-    //     })
    },
    addUser:(req,res,next)=>{
     console.log("studenthome.controller.createOne called");
@@ -166,21 +113,5 @@ module.exports = {
             console.log(err)
         }
     })
-
-
-
-//         objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
-        
-//         database.addUser(objIndex,(err,result)=>{
-//             if(err){
-//                 next(err)
-//             }
-//             if(result){
-//                 res.status(200).json({
-//                     status:'succes',
-//                     result: result
-//                 })
-//             }
-//         })
    }
 }

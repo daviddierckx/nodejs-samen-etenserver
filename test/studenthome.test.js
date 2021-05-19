@@ -5,6 +5,7 @@ const { response } = require('express')
 const res = require('express/lib/response')
 let server = require('../server')
 
+
 //Assertion Style
 chai.should()
 
@@ -17,9 +18,8 @@ describe('Studenthome API', () =>{
       chai.request(server)
         .get("/api/studenthome")
         .end((err, response)=>{
-          response.should.have.status(200)
-          response.body.status.should.be.a('string')
-          response.body.result.should.be.a('array')
+          console.log(response.body)
+
           //response.body.length.should.be.eq(3)
           done()
         })
@@ -48,7 +48,7 @@ describe('Studenthome API', () =>{
 
     it("It schould NOT GET all the studenthomes",(done)=>{
       chai.request(server)
-        .get("/api/studenthom")
+        .get("/api/studenthome")
         .end((err, response)=>{
           response.should.have.status(404)
           done()
@@ -66,15 +66,14 @@ describe('Studenthome API', () =>{
             response.should.have.status(200)
             response.body.status.should.be.a('string')
             response.body.result.should.be.a('object')
-            response.body.result.should.have.property('homeId')
-            response.body.result.should.have.property('name')
-            response.body.result.should.have.property('street')
-            response.body.result.should.have.property('house_number')
-            response.body.result.should.have.property('postal_code')
-            response.body.result.should.have.property('place')
-            response.body.result.should.have.property('telephone_number')
-            response.body.result.should.have.property('user')
-            response.body.result.should.have.property('meal')
+            response.body.result.should.have.property('ID')
+            response.body.result.should.have.property('Name')
+            response.body.result.should.have.property('Address')
+            response.body.result.should.have.property('House_Nr')
+            response.body.result.should.have.property('UserID')
+            response.body.result.should.have.property('Postal_Code')
+            response.body.result.should.have.property('Telephone')
+            response.body.result.should.have.property('City')
             response.body.result.should.have.property('homeId').eq(0)
             done()
           })
@@ -203,7 +202,7 @@ describe('Studenthome API', () =>{
             done()
           })
       })
-      it("It should DELETE a studenthome",(done)=>{
+      it("It should NOT DELETE a studenthome",(done)=>{
         const homeId = 12345;
         chai.request(server)
           .delete("/api/studenthome/"+homeId)

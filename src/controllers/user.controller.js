@@ -1,8 +1,8 @@
 const { create, getUsersByUserId,getUsers,getUserByUserEmail } = require("./user.service")
 const {genSaltSync,hashSync,compareSync } = require("bcrypt")
 const bcrypt = require("bcrypt")
-const { sign } = require("jsonwebtoken")
-
+const { sign, decode } = require("jsonwebtoken")
+let array = []
 module.exports = {
     createUser:(req, res) => {
         const body = req.body
@@ -53,7 +53,7 @@ module.exports = {
             })
         })
     },
-    login: (req, res) => {
+    login: (req, res,callback) => {
         const body = req.body;
         getUserByUserEmail(body.email, (err, results) => {
           if (err) {
@@ -71,11 +71,15 @@ module.exports = {
             const jsontoken = sign({ result: results }, "qwe1234", {
               expiresIn: "1h"
             });
-            return res.json({
+             res.json({
               success: 1,
               message: "login successfully",
               token: jsontoken
             });
+            const decoded = decode(jsontoken)
+            const UserID = decoded.result.ID
+            array.push(UserID)
+            
           } else {
             return res.json({
               success: 0,
@@ -83,5 +87,6 @@ module.exports = {
             });
           }
         });
-    }
-}
+    },
+    array
+} 

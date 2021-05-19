@@ -1,146 +1,110 @@
-let lastInsertedMealIndex = 1;
-
 const database = require('../dao/database')
+const mysql = require('mysql')
+const bodyparser = require('body-parser')
+
+var mysqlConnection = mysql.createConnection({
+    host:'localhost',
+    user: 'root',
+    password: '',
+    database: 'studenthome',
+    multipleStatements: true
+})
+
+mysqlConnection.connect((err)=>{
+    if(!err)
+    console.log('DB connection succeeded')
+    else
+    console.log('DB connection failed \n Error : '+ JSON.stringify(err,undefined,2))
+})
 
 module.exports = {
     createMeal: (req,res,next)=>{
-        console.log("meal.controller.createMeal called");
-        objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
-        
-        const naam = req.body.naam
-        const beschrijving = req.body.beschrijving
-        const aangemaaktOp = req.body.aangemaaktOp
-        const aangebodenOp = req.body.aangebodenOp
-        const prijs = req.body.prijs
-        const allergieInfo = req.body.allergieInfo
-        const ingredienten = req.body.ingredienten
-
-        const values = {
-            mealId:lastInsertedMealIndex++,
-            naam: naam,
-            beschrijving:beschrijving,
-            aangemaaktOp: aangemaaktOp,
-            aangebodenOp: aangebodenOp,
-            prijs: prijs,
-            allergieInfo: allergieInfo,
-            ingredienten: ingredienten
-        }
-
-
-        database.addMeal(values,objIndex,(err,result)=>{
-        
-            if(err){
-             res.status(400).json({
-             message: 'Add meal failed' })
+        console.log("meal.controller.creatMeal called");
+        let emp = req.body
+        let sql = "SET @ID = ?;SET @Name = ?;SET @Description = ?;SET @Ingredients = ?;SET @Allergies = ?;SET @CreatedOn = ?;SET @OfferedOn = ?;SET @Price = ?;SET @UserID = ?;SET @StudenthomeID = ?;\
+        CALL MealAddOrEdit(@ID,@Name, @Description, @Ingredients, @Allergies, @CreatedOn, @OfferedOn, @Price,@UserID,@StudenthomeID);"
+        mysqlConnection.query(sql,[emp.ID,emp.Name, emp.Description, emp.Ingredients, emp.Allergies, emp.CreatedOn, emp.OfferedOn, emp.Price, emp.UserID, parseInt(req.params.homeId)],(err,rows,fields)=>{
+            if(emp.ID === null || emp.ID != 0){
+                res.status(400).send('Failed to insert, change id to 0')
             }
-             if(result){
-                res.status(200).json({status: "succes",result:result})
+            // else if((emp.Postal_Code.length !== 6 || emp.Telephone.length !== 10)
+            //      || emp.Name === undefined || emp.Address === undefined || emp.House_Nr === undefined || emp.City === undefined){
+            //          return res.status(400).send("Failed to post, Invalid input")
+            // }
+            else if(!err){
+                res.status(201)
+                         rows.forEach(element => {
+                            if(element.constructor == Array){
+                                res.send('Inserted meal with id : '+element[0].ID)
+                            }
+                        })
+            }
+            else{
+                console.log(err)
             }
         })
     },
     updateMeal:(req,res,next)=>{
         console.log("meal.controller.updateMeal called");
         
-
-        objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
-        mealIndex = database.db[objIndex].meal.findIndex((obj => obj.mealId == req.params.mealId))
-        //Log object to Console.
-        console.log("Before update: ", database.db[objIndex])
-        
-        //Update object's name property.
-        database.db[objIndex].meal[mealIndex].naam = req.body.naam
-        database.db[objIndex].meal[mealIndex].beschrijving  = req.body.beschrijving
-        database.db[objIndex].meal[mealIndex].aangemaaktOp  = req.body.aangemaaktOp
-        database.db[objIndex].meal[mealIndex].aangebodenOp  = req.body.aangebodenOp
-        database.db[objIndex].meal[mealIndex].prijs  = req.body.prijs
-        database.db[objIndex].meal[mealIndex].allergieInfo  = req.body.allergieInfo
-        database.db[objIndex].meal[mealIndex].ingredienten  = req.body.ingredienten
-
-        //Log object to console again.
-        console.log("After update: ", database.db[objIndex])
-        
-        database.update((err, result)=>{
-            if(err){
-                console.log("error updating meal",values)
-                next(err)
-
+        let emp = req.body
+        let sql = "SET @ID = ?;SET @Name = ?;SET @Description = ?;SET @Ingredients = ?;SET @Allergies = ?;SET @CreatedOn = ?;SET @OfferedOn = ?;SET @Price = ?;SET @UserID = ?;SET @StudenthomeID = ?;\
+        CALL MealAddOrEdit(@ID,@Name, @Description, @Ingredients, @Allergies, @CreatedOn, @OfferedOn, @Price,@UserID,@StudenthomeID);"
+        mysqlConnection.query(sql,[parseInt(req.params.mealId),emp.Name, emp.Description, emp.Ingredients, emp.Allergies, emp.CreatedOn, emp.OfferedOn, emp.Price, emp.UserID, parseInt(req.params.homeId)],(err,rows,fields)=>{
+            
+            if(!err){
+                res.status(201)
+                         rows.forEach(element => {
+                            if(element.constructor == Array){
+                                res.send('Inserted meal with id : '+element[0].ID)
+                            }
+                        })
             }
-            if(result){
-                res.status(200).json({status: "succes",result:result})
+            else{
+                console.log(err)
             }
-        })    
+        })
+        
     },
     mealList: (req,res,next)=>{
         console.log("meal.controller.mealList called");
-        let mealList = []
-
-        objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
-        
-        for (i = 0; i < database.db[objIndex].meal.length; i++) {
-            mealList.push({meal:database.db[objIndex].meal[i]});
-            console.log(database.db[objIndex].meal[i].naam)
-          }
-        
-        console.log
-        console.log(database.db[objIndex].meal.length)
-        database.getAllMeal((err, result)=>{
-            if(err){
-                next(err)
-            }
-            if(result){
+        mysqlConnection.query("SELECT * FROM meal WHERE StudenthomeID = "+ req.params.homeId,(err,rows,fields)=>{ //WHERE StudenthomeID = req.params.homeId
+            if(!err && rows.length > 0){
                 res.status(200).json({
-                    status: "succes",
-                    result: mealList
-                })
+                        status:'succes',
+                        result: rows
+                    })
             }
-        })
+            else{
+                res.status(404).send("The meal with the provided ID does not exist")
+                 }
+            })
     },
     mealDetails:(req,res,next)=>{
-        console.log("meal.controller.mealDetails called");
-        let mealList = []
-
-        objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
-        
-        for (i = 0; i < database.db[objIndex].meal.length; i++) {
-            if(database.db[objIndex].meal[i].mealId == req.params.mealId){
-                mealList.push({meal:database.db[objIndex].meal[i]});
-                console.log(database.db[objIndex].meal[i].naam)
-
-            }
-          }
-        
-        database.getMealDetails((err, result)=>{
-            if(err){
-                next(err)
-            }
-            if(result){
-                res.status(200).json({
-                    status: "succes",
-                    result: mealList
+        console.log("meal.controller.mealdetails called");
+        mysqlConnection.query("SELECT * FROM meal WHERE ID = "+req.params.mealId + "  AND StudenthomeID = "+ req.params.homeId,(err,rows,fields)=>{
+        if(!err && rows.length > 0){
+            console.log(rows)
+            res.status(200).json({
+                    status:'succes',
+                    result: rows
                 })
-            }
+        }
+        else{
+            res.status(404).send("The meal with the provided ID does not exist")
+             }
         })
     },
     mealDelete:(req,res,next)=>{
         console.log("meal.controller.mealDelete called");
 
-        objIndex = database.db.findIndex((obj => obj.homeId == req.params.homeId));
-        mealIndex = database.db[objIndex].meal.findIndex((obj => obj.mealId == req.params.mealId))
-        
-        var ar = database.db[objIndex].meal
-        ar.splice(mealIndex,1)
-        
-
-        database.deleteMealDetails((err,result)=>{
-            if(err){
-                next(err)
+        mysqlConnection.query("DELETE FROM meal WHERE ID = "+req.params.mealId  +" AND StudenthomeID = "+ req.params.homeId,(err,rows,fields)=>{
+            if(!err && rows.affectedRows > 0){
+                res.status(200)
+                res.send('deletion succeeded')
             }
-            if(result){
-                console.log( "Delete succes" );
-                res.status(200).json({
-                    status:'succes',
-                    result: result
-                })
+            else{
+                res.status(404).send("The meal with the provided ID does not exist")
             }
         })
     }

@@ -1,6 +1,13 @@
+const {createPool} = require("mysql")
+var pool = createPool({
+    host:'localhost',
+    user: 'root',
+    password: '',
+    database: 'studenthome',
+    multipleStatements: true
+})
 
-
-
+module.exports = pool
 // let db = [{
 //     "homeId": 0,
 //     "name": "Avans",

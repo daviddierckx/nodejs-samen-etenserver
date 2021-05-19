@@ -1,5 +1,6 @@
 const express = require('express')
 const controller = require('../controllers/meal.controller')
+const { checkToken } = require("../../auth/token_validation")
 
 
 const app  = express()
@@ -8,14 +9,14 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 //Maaltijd aanmaken UC-301
-app.post('/studenthome/:homeId/meal',controller.createMeal)
+app.post('/studenthome/:homeId/meal',checkToken,controller.createMeal)
 // //Maaltijd wijziggen UC-302 
-app.put('/studenthome/:homeId/meal/:mealId',controller.updateMeal)
+app.put('/studenthome/:homeId/meal/:mealId',checkToken,controller.updateMeal)
 // //Lijst van maaltijden opvragen
-app.get('/studenthome/:homeId/meal',controller.mealList)
+app.get('/studenthome/:homeId/meal',checkToken,controller.mealList)
 // //Details maaltijd opvragen
-app.get('/studenthome/:homeId/meal/:mealId',controller.mealDetails)
+app.get('/studenthome/:homeId/meal/:mealId',checkToken,controller.mealDetails)
 // //Maaltijd verwijderen
-app.delete('/studenthome/:homeId/meal/:mealId',controller.mealDelete)
+app.delete('/studenthome/:homeId/meal/:mealId',checkToken,controller.mealDelete)
 
 module.exports = app;

@@ -5,22 +5,22 @@ const { checkToken } = require("../../auth/token_validation")
 
 
 
-const app  = express()
+const app = express()
 //
 app.use(express.json())
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }))
 //Read ALL UC202 +
-app.get('/studenthome',checkToken,controller.getAll)
+app.get('/studenthome', controller.house_all_get)
 
 // //Read One UC203 +
-app.get('/studenthome/:homeId',checkToken, controller.getOne)
+app.get('/studenthome/:homeId', controller.house_details_get)
 //Create one UC201 +
-app.post('/studenthome',checkToken,controller.createOne)
+app.post('/studenthome', controller.house_create_post)
 // //Update one UC204 +
-app.put('/studenthome/:homeId',checkToken,controller.updateOne)
+app.put('/studenthome/:homeId', controller.house_update_put)
 // //Delete one UC205 +
-app.delete('/studenthome/:homeId',checkToken,controller.delete)
-// //Add user UC206 +
-app.post('/studenthome/:homeId/user',checkToken,controller.addUser)
+app.delete('/studenthome/:homeId', controller.house_delete_delete)
+// //Add user UC206 -
+app.put('/studenthome/:homeId/user', controller.house_add_user_put)
 
 module.exports = app;

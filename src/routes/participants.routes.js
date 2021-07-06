@@ -11,7 +11,7 @@ app.use(express.urlencoded({extended:true}))
 
 // app.post('/studenthome/:homeId/meal/:mealId/signup',checkToken, createUser)
 // app.delete('/studenthome/:homeId/meal/:mealId/signoff',checkToken, getUsers)
-app.get('/meal/:mealId/participants',checkToken, controller.getAllParticipants)
-app.get('/meal/:mealId/participants/:participantId',checkToken,controller.getParticipantByID)
+app.get('/meal/:mealId/participants',controller.getAllParticipants)
+app.get('/meal/:mealId/participants/:participantId',controller.getParticipantByID)
 
 module.exports = app;

@@ -6,17 +6,6 @@ chai.use(require('chai-http'));
 
 const collectedData = {};
 
-var server = require("../").server;
-var request = require("supertest").agent(server);
-
-describe("Our amazing site", function () {
-
-  after(function (done) {
-    server.close();
-    done();
-  });
-
-});
 //If disabled it is possible to seed the database with some data
 const alsoDelete = true;
 describe('API', function () {

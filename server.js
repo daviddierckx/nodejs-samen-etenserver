@@ -18,7 +18,8 @@ require("dotenv").config()
 
 var logger = require('tracer').console()
 
-const port = process.env.PORT || 3000
+//verander naar 3000
+const port = process.env.PORT || 3306
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());

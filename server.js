@@ -95,9 +95,9 @@ app.use((error, req, res, next) => {
     message: error.message,
   });
 });
-if (!module.parent) {
-  app.listen(port, () => {
-    logger.log(`Example app listening at :${port}`)
-  })
-}
+
+app.listen(port, () => {
+  logger.log(`Example app listening at :${port}`)
+})
+
 module.exports = app;

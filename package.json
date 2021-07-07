@@ -5,10 +5,13 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha -reporter spec test/**/*.test.js --exit",
-    "mocha": "mocha",
+    "test-win": "cls && npm run test",
     "coverage": "nyc --reporter=lcov npm run test",
     "sonar": "sonar-scanner",
-    "start": "node server.js"
+    "upload-sonar": "npm run coverage && npm run sonar",
+    "pretty-quick": "pretty-quick",
+    "prepare": "husky install",
+    "watch": "npm-watch"
   },
   "author": "David Dierckx",
   "license": "ISC",

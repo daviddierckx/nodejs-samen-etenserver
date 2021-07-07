@@ -25,46 +25,46 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cookieParser());
 app.use(cookies());
-//middleware logger
-app.use(function timeLog(req, res, next) {
-  logger.log(req.originalUrl, "Time:", Date.now(), "data:", JSON.stringify(req.body), "query:", JSON.stringify(req.query), "params:", JSON.stringify(req.params));
-  next();
-});
+// //middleware logger
+// app.use(function timeLog(req, res, next) {
+//   logger.log(req.originalUrl, "Time:", Date.now(), "data:", JSON.stringify(req.body), "query:", JSON.stringify(req.query), "params:", JSON.stringify(req.params));
+//   next();
+// });
 
-// User Authentication
-app.use(function timeLog(req, res, next) {
-  if (
-    req._parsedUrl.pathname === "/register" ||
-    req._parsedUrl.pathname === "/login" ||
-    req._parsedUrl.pathname === "/studenthome" ||
-    req._parsedUrl.pathname.startsWith("/studenthome")
-  ) {
-    return next();
-  }
+// // User Authentication
+// app.use(function timeLog(req, res, next) {
+//   if (
+//     req._parsedUrl.pathname === "/register" ||
+//     req._parsedUrl.pathname === "/login" ||
+//     req._parsedUrl.pathname === "/studenthome" ||
+//     req._parsedUrl.pathname.startsWith("/studenthome")
+//   ) {
+//     return next();
+//   }
 
-  // If you want to skip out add this to your .env file: "SKIP_AUTH=1"
-  if (process.env.SKIP_AUTH === 1) {
-    logger.log("Skipping auth because of ENV SKIP_AUTH")
-    return next();
-  }
+//   // If you want to skip out add this to your .env file: "SKIP_AUTH=1"
+//   if (process.env.SKIP_AUTH === 1) {
+//     logger.log("Skipping auth because of ENV SKIP_AUTH")
+//     return next();
+//   }
 
-  // Check if auth cookie exists
-  if (req.cookies.home_auth === undefined) {
-    return res.status(401).send(" auth cookie don't exists");
-  }
+//   // Check if auth cookie exists
+//   if (req.cookies.home_auth === undefined) {
+//     return res.status(401).send(" auth cookie don't exists");
+//   }
 
-  logger.log("User authentication started");
-  const token = req.cookies.home_auth;
-  jwt.verify(token, config.auth.secret, {}, function (err, decoded) {
-    if (err) {
-      return res.status(401).send("res.status(401)");
-    }
-    req.user_email = decoded.user_email;
-    req.user_id = decoded.user_id;
-    logger.log("User authorization success:", JSON.stringify(decoded));
-    next();
-  });
-});
+//   logger.log("User authentication started");
+//   const token = req.cookies.home_auth;
+//   jwt.verify(token, config.auth.secret, {}, function (err, decoded) {
+//     if (err) {
+//       return res.status(401).send("res.status(401)");
+//     }
+//     req.user_email = decoded.user_email;
+//     req.user_id = decoded.user_id;
+//     logger.log("User authorization success:", JSON.stringify(decoded));
+//     next();
+//   });
+// });
 
 //Instal the routes
 app.use(express.json())

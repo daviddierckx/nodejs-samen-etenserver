@@ -1,6 +1,5 @@
 const express = require('express')
 const controller = require('../controllers/studenthome.controller')
-const { checkToken } = require("../../auth/token_validation")
 
 
 

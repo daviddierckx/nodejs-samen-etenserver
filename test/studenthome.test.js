@@ -4,11 +4,10 @@ const expect = require('chai').expect
 const faker = require('faker/locale/nl');
 chai.use(require('chai-http'));
 
-const collectedData = { authToken: '', authToken2: '', createdHouse: { id: 1 } };
+const collectedData = {};
 
 //If disabled it is possible to seed the database with some data
 const alsoDelete = true;
-
 describe('API', function () {
   describe('info', function () {
     it('should return server info without error', function (done) {
@@ -270,15 +269,14 @@ describe('API', function () {
           'housenumber': faker.datatype.number(),
           'postalcode': faker.address.zipCode(undefined),
           'city': faker.address.city(),
-          'phonenumber': "+316 22467104",
-          'user_id': 1000
+          'phonenumber': "+316 22467104"
         };
         chai.request(app)
           .post('/api/studenthome')
           .type('form')
           .send(house_data)
           .end((err, res) => {
-            expect(res).to.have.status(400);
+            expect(res).to.have.status(401);
             expect(res).to.have.property('body').to.have.property('success').to.equal(false);
             done()
           });
@@ -288,11 +286,10 @@ describe('API', function () {
         const house_data = {
           'name': faker.company.companyName(undefined),
           'street': faker.address.streetName(false),
-          'housenumber': 13,
+          'housenumber': faker.datatype.number(),
           'postalcode': faker.address.zipCode(undefined),
           'city': faker.address.city(),
-          'phonenumber': "+316 22467104",
-          'user_id': 1
+          'phonenumber': "+316 22467104"
         };
         chai.request(app)
           .post('/api/studenthome')
@@ -302,6 +299,10 @@ describe('API', function () {
           .end((err, res) => {
             expect(res).to.have.status(201);
             expect(res).to.have.property('body').to.have.property('success').to.equal(true);
+            expect(res).to.have.property('body').to.have.property('house').own.include(house_data);
+            expect(res).to.have.property('body').to.have.property('house').to.have.property('user_email').to.equal(collectedData.registerData.email_address)
+            expect(res).to.have.property('body').to.have.property('house').to.have.property('user_fullname').to.equal(`${collectedData.registerData.firstname} ${collectedData.registerData.lastname}`);
+            collectedData.createdHouse = res.body.house;
             done()
           });
       });
@@ -310,12 +311,12 @@ describe('API', function () {
       it('#TC-201-4 House at address already exists', function (done) {
         // Replace housenumber&postalcode with previously created home data
         const house_data = {
-          'name': "Princenhage",
-          'street': "Princenhage",
-          'housenumber': 11,
-          'postalcode': "4706RX",
-          'city': "Breda",
-          'phonenumber': "061234567891"
+          'name': faker.company.companyName(undefined),
+          'street': faker.address.streetName(false),
+          'housenumber': collectedData.createdHouse.housenumber,
+          'postalcode': collectedData.createdHouse.postalcode,
+          'city': faker.address.city(),
+          'phonenumber': "+316 22467104"
         };
         chai.request(app)
           .post('/api/studenthome')
@@ -362,7 +363,7 @@ describe('API', function () {
       });
       it('#TC-202-5 should list all student houses in a city', function (done) {
         chai.request(app)
-          .get(`/api/studenthome?city=Breda`)
+          .get(`/api/studenthome?city=${collectedData.createdHouse.city}`)
           .set({ "Authorization": `Bearer ${collectedData.authToken}` })
           .end((err, res) => {
             expect(res).to.have.status(200);
@@ -374,7 +375,7 @@ describe('API', function () {
       });
       it('#TC-202-6 should list all student houses with the name', function (done) {
         chai.request(app)
-          .get(`/api/studenthome?name=`)
+          .get(`/api/studenthome?name=${collectedData.createdHouse.name}`)
           .set({ "Authorization": `Bearer ${collectedData.authToken}` })
           .end((err, res) => {
             expect(res).to.have.status(200);
@@ -413,12 +414,16 @@ describe('API', function () {
       });
       it('#TC-203-2 should list details of a studenthouse', function (done) {
         chai.request(app)
-          .get(`/api/studenthome/1`)
+          .get(`/api/studenthome/${collectedData.createdHouse.id}`)
           .set({ "Authorization": `Bearer ${collectedData.authToken}` })
           .end((err, res) => {
             expect(res).to.have.status(200);
             expect(res).to.have.property('body').to.have.property('success').to.equal(true);
             expect(res).to.have.property('body').to.have.property('meals');
+            expect(res).to.have.property('body').to.have.property('house').own.include(collectedData.createdHouse);
+            expect(res).to.have.property('body').to.have.property('house').to.have.property('user_email').to.equal(collectedData.registerData.email_address)
+            expect(res).to.have.property('body').to.have.property('house').to.have.property('user_fullname').to.equal(`${collectedData.registerData.firstname} ${collectedData.registerData.lastname}`);
+            collectedData.houseDetails = res.body.house;
             done()
           });
       });
@@ -432,11 +437,10 @@ describe('API', function () {
           'housenumber': faker.datatype.number(),
           'postalcode': faker.address.zipCode(undefined),
           'city': faker.address.city(),
-          'phonenumber': "+316 22467104",
-          "user_id": 1
+          'phonenumber': "+316 22467104"
         };
         chai.request(app)
-          .put(`/api/studenthome/1`)
+          .put(`/api/studenthome/${collectedData.createdHouse.id}`)
           .type('form')
           .set({ "Authorization": `Bearer ${collectedData.authToken}` })
           .send(house_data)
@@ -454,11 +458,10 @@ describe('API', function () {
           'housenumber': faker.datatype.number(),
           'postalcode': faker.address.zipCode(undefined).substring(1),
           'city': faker.address.city(),
-          'phonenumber': "+316 22467104",
-          "user_id": 1
+          'phonenumber': "+316 22467104"
         };
         chai.request(app)
-          .put(`/api/studenthome/1`)
+          .put(`/api/studenthome/${collectedData.createdHouse.id}`)
           .type('form')
           .set({ "Authorization": `Bearer ${collectedData.authToken}` })
           .send(house_data)
@@ -476,11 +479,10 @@ describe('API', function () {
           'housenumber': faker.datatype.number(),
           'postalcode': faker.address.zipCode(undefined),
           'city': faker.address.city(),
-          'phonenumber': "22467104",
-          "user_id": 1
+          'phonenumber': "22467104"
         };
         chai.request(app)
-          .put(`/api/studenthome/1`)
+          .put(`/api/studenthome/${collectedData.createdHouse.id}`)
           .type('form')
           .set({ "Authorization": `Bearer ${collectedData.authToken}` })
           .send(house_data)
@@ -498,11 +500,10 @@ describe('API', function () {
           'housenumber': faker.datatype.number(),
           'postalcode': faker.address.zipCode(undefined),
           'city': faker.address.city(),
-          'phonenumber': "+316 22467104",
-          "user_id": 1
+          'phonenumber': "+316 22467104"
         };
         chai.request(app)
-          .put(`/api/studenthome/1000`)
+          .put(`/api/studenthome/${collectedData.createdHouse.id}`)
           .type('form')
           .send(house_data)
           .end((err, res) => {
@@ -519,17 +520,20 @@ describe('API', function () {
           'housenumber': faker.datatype.number(),
           'postalcode': faker.address.zipCode(undefined),
           'city': faker.address.city(),
-          'phonenumber': "+316 22467104",
-          "user_id": 1
+          'phonenumber': "+316 22467104"
         };
         chai.request(app)
-          .put(`/api/studenthome/1`)
+          .put(`/api/studenthome/${collectedData.createdHouse.id}`)
           .set({ "Authorization": `Bearer ${collectedData.authToken}` })
           .type('form')
           .send(house_data)
           .end((err, res) => {
             expect(res).to.have.status(202);
             expect(res).to.have.property('body').to.have.property('success').to.equal(true);
+            expect(res).to.have.property('body').to.have.property('house').own.include(house_data);
+            expect(res).to.have.property('body').to.have.property('house').to.have.property('user_email').to.equal(collectedData.registerData.email_address)
+            expect(res).to.have.property('body').to.have.property('house').to.have.property('user_fullname').to.equal(`${collectedData.registerData.firstname} ${collectedData.registerData.lastname}`);
+            collectedData.updatedHouse = res.body.house;
             done()
           });
       });
@@ -572,7 +576,7 @@ describe('API', function () {
         it('#TC-205-2 Auhtorization missing', function (done) {
           // Removed authorization header
           chai.request(app)
-            .del(`/api/studenthome/1`)
+            .del(`/api/studenthome/${collectedData.createdHouse.id}`)
             .end((err, res) => {
               expect(res).to.have.status(401);
               expect(res).to.have.property('body').to.have.property('success').to.equal(false);

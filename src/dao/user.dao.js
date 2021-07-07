@@ -29,6 +29,7 @@ exports.login = function (email, password, callback) {
         if (results.length === 0) {
             return callback("user-login-failed", undefined);
         }
+
         exports.generateNewToken(results[0].email_address, results[0].ID, callback)
     });
 }

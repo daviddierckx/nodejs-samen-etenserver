@@ -87,7 +87,7 @@ exports.house_update_put = function (req, res) {
     }
 
     logger.log("Studenthome update with id", req.params.homeId);
-    studenthouse_dao.checkIfUserIsAdmin(req.params.homeId, req.body.user_id, (err, user_verified) => {
+    studenthouse_dao.checkIfUserIsAdmin(req.params.homeId, req.user_id, (err, user_verified) => {
         if (err) {
             logger.log("Error in update:", err);
             return res.status(401).send({ "success": false, "error": err });
@@ -124,7 +124,7 @@ exports.house_delete_delete = function (req, res) {
             logger.log("Error in house removal:", err);
             return res.status(404).send({ "success": false, "error": err });
         }
-        studenthouse_dao.checkIfUserIsAdmin(req.params.homeId, req.body.user_id, (err, user_verified) => {
+        studenthouse_dao.checkIfUserIsAdmin(req.params.homeId, req.user_id, (err, user_verified) => {
             if (err) {
                 logger.log("Error in delete:", err);
                 return res.status(401).send({ "success": false, "error": err });

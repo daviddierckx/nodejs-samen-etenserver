@@ -4,9 +4,10 @@ const controller = require('../controllers/user.controller')
 const express = require('express')
 const { registerUser, getUsersByUserId, getUsers, login } = require('../controllers/user.controller')
 
-const { checkToken } = require("../../auth/token_validation")
-
-
+const router = express.Router();
+const config = require('../utils/configuration');
+const jwt = require('jsonwebtoken');
+const logger = require('tracer').console()
 
 
 const app = express()

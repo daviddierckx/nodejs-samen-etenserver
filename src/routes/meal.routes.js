@@ -1,6 +1,5 @@
 const express = require('express')
 const controller = require('../controllers/meal.controller')
-const { checkToken } = require("../../auth/token_validation")
 
 
 const app = express()

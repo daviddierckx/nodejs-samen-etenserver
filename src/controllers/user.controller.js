@@ -1,4 +1,5 @@
 const users_dao = require('./../dao/user.dao');
+const config = require('../utils/configuration')
 const request_utils = require('./../utils/verifyUtils');
 const logger = require('tracer').console()
 
@@ -45,6 +46,8 @@ exports.login = function (req, res) {
       return res.status(400).send({ "success": false, "error": err2 });
     }
     logger.log("User logged in with token", res2);
+
+    res.cookie('home_auth', res2.token, { maxAge: 900000, httpOnly: true });
     return res.status(201).send({ "success": true, "token": res2.token, "user_id": res2.user_id });
   })
 };

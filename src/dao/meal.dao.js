@@ -11,7 +11,7 @@ exports.add = function (data, callback) {
 }
 
 exports.get = function (id, callback) {
-    database.con.query('SELECT meal.*, user.Email AS user_email, CONCAT(user.First_Name, user.Last_Name) AS user_fullname FROM meal LEFT JOIN user ON meal.UserID = user.ID WHERE meal.id = ?', [id], function (error, results, fields) {
+    database.con.query('SELECT meal.*, user.Email AS user_email, CONCAT(user.First_Name," ", user.Last_Name) AS user_fullname FROM meal LEFT JOIN user ON meal.UserID = user.ID WHERE meal.id = ?', [id], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
         if (results.length === 0) {
             return callback("meal-not-found", undefined);
@@ -51,7 +51,7 @@ exports.checkIfUserIsAdmin = function (id, user_id, callback) {
 }
 
 exports.getAll = function (callback) {
-    database.con.query('SELECT meal.*, user.Email AS user_email, CONCAT(user.First_Name, user.Last_Name) AS user_fullname FROM meal LEFT JOIN user ON meal.UserID = user.ID', [], function (error, results, fields) {
+    database.con.query('SELECT meal.*, user.Email AS user_email, CONCAT(user.First_Name," ", user.Last_Name) AS user_fullname FROM meal LEFT JOIN user ON meal.UserID = user.ID', [], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
         callback(undefined, results);
     });
@@ -59,7 +59,7 @@ exports.getAll = function (callback) {
 
 
 exports.getAllMealsForHouse = function (houseId, callback) {
-    database.con.query('SELECT meal.*, user.Email AS user_email, CONCAT(user.First_Name, user.Last_Name) AS user_fullname FROM meal LEFT JOIN user ON meal.UserID = user.ID WHERE meal.StudenthomeID = ?', [houseId], function (error, results, fields) {
+    database.con.query('SELECT meal.*, user.Email AS user_email, CONCAT(user.First_Name," ", user.Last_Name) AS user_fullname FROM meal LEFT JOIN user ON meal.UserID = user.ID WHERE meal.StudenthomeID = ?', [houseId], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
         callback(undefined, results);
     });

@@ -62,25 +62,30 @@ exports.update_put = function (req, res) {
             logger.log("Error in update:", err);
             return res.status(404).send({ "success": false, "error": err });
         }
-
-        meals_dao.update(req.params.mealId, {
-            name: req.body.name,
-            description: req.body.description,
-            price: req.body.price,
-            allergies: req.body.allergies,
-            ingredients: req.body.ingredients,
-            offered_since: new Date(req.body.offered_since),
-            MaxParticipants: req.body.MaxParticipants,
-            CreatedOn: new Date(req.body.CreatedOn)
-        }, (err, res2) => {
+        meals_dao.checkIfUserIsAdmin(req.params.mealId, req.user_id, (err, user_verified) => {
             if (err) {
                 logger.log("Error in update:", err);
-                return res.status(400).send({ "success": false, "error": err });
+                return res.status(401).send({ "success": false, "error": err });
             }
-            logger.log("Updated meal successfully with data", JSON.stringify(res2));
-            return res.status(202).send({ "success": true, "meal": res2 });
+            meals_dao.update(req.params.mealId, {
+                name: req.body.name,
+                description: req.body.description,
+                price: req.body.price,
+                allergies: req.body.allergies,
+                ingredients: req.body.ingredients,
+                offered_since: new Date(req.body.offered_since),
+                MaxParticipants: req.body.MaxParticipants,
+                CreatedOn: new Date(req.body.CreatedOn)
+            }, (err, res2) => {
+                if (err) {
+                    logger.log("Error in update:", err);
+                    return res.status(400).send({ "success": false, "error": err });
+                }
+                logger.log("Updated meal successfully with data", JSON.stringify(res2));
+                return res.status(202).send({ "success": true, "meal": res2 });
+            });
         });
-    });
+    })
 };
 
 exports.delete = function (req, res) {
@@ -96,21 +101,21 @@ exports.delete = function (req, res) {
             logger.log("Error in update:", err);
             return res.status(404).send({ "success": false, "error": err });
         }
-        //meals_dao.checkIfUserIsAdmin(req.params.mealId, req.user_id, (err, user_verified) => {
-        // if (err) {
-        //   logger.log("Error in removal:", err);
-        // return res.status(401).send({ "success": false, "error": err });
-        // }
-        meals_dao.remove(req.params.mealId, (err, res2) => {
+        meals_dao.checkIfUserIsAdmin(req.params.mealId, req.user_id, (err, user_verified) => {
             if (err) {
                 logger.log("Error in removal:", err);
-                return res.status(400).send({ "success": false, "error": err });
+                return res.status(401).send({ "success": false, "error": err });
             }
-            logger.log("Removed meal successfully");
-            return res.status(202).send({ "success": true, "id": res2 });
+            meals_dao.remove(req.params.mealId, (err, res2) => {
+                if (err) {
+                    logger.log("Error in removal:", err);
+                    return res.status(400).send({ "success": false, "error": err });
+                }
+                logger.log("Removed meal successfully");
+                return res.status(202).send({ "success": true, "id": res2 });
+            });
         });
     });
-    // });
 };
 
 exports.get_all_get = function (req, res) {

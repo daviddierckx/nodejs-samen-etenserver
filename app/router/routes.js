@@ -35,7 +35,7 @@ router.use(function timeLog(req, res, next) {
 });
 
 router.use('/info', require('./controllers/info.js'));
-router.use('/studenthome', require('./studenthome.js'));
+router.use('/', require('./studenthome.js'));
 
 router.post('/register', user_controller.register);
 router.post('/login', user_controller.login);

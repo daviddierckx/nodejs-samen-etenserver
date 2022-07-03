@@ -22,7 +22,7 @@ exports.get = function (id, callback) {
 
 exports.remove = function (id, callback) {
     id = parseInt(id);
-    database.con.query('DELETE FROM `meals` WHERE id=?',
+    database.con.query('DELETE FROM `meal` WHERE id=?',
         [id], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
@@ -51,7 +51,7 @@ exports.checkIfUserIsAdmin = function (id, user_id, callback) {
 }
 
 exports.getAll = function (callback) {
-    database.con.query('SELECT meals.*, users.email_address AS user_email, CONCAT(users.firstname, \' \', users.lastname) AS user_fullname FROM meals LEFT JOIN users ON meals.user_id = users.id', [], function (error, results, fields) {
+    database.con.query('SELECT meal.*, user.emailAdress AS cook_user_email, CONCAT(user.firstName, user.lastName) AS cook_user_fullname FROM meal LEFT JOIN user ON meal.cookId = user.id', [], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
         callback(undefined, results);
     });

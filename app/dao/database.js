@@ -11,7 +11,7 @@ exports.con = mysql.createConnection({
 });
 
 exports.con.connect(function (err) {
-    if (err) throw err;
+
     console.log("Connected!");
     logger.log("Database connected with id:", exports.con.threadId);
 });

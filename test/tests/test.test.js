@@ -642,7 +642,7 @@ describe('API', function () {
                         done()
                     });
             });
-            it('#TC-401-3 Succesvol afgemeld', function (done) {
+            it('#TC-402-3 Succesvol afgemeld', function (done) {
                 chai.request(app)
                     .delete(`/api/meal/1/signoff`)
                     .set({ "Authorization": `Bearer ${collectedData.authToken}` })

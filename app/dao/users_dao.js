@@ -41,7 +41,15 @@ exports.generateNewToken = function (email, user_id, callback) {
             });
     });
 }
-
+exports.getPersonalInfo = function (id, callback) {
+    database.con.query('SELECT * FROM user WHERE user.id = ?', userId, function (error, results, fields) {
+        if (error) return callback(error.sqlMessage, undefined);
+        if (results.length === 0) {
+            return callback("user-not-found", undefined);
+        }
+        callback(undefined, results[0]);
+    });
+}
 
 exports.get = function (id, callback) {
     database.con.query('SELECT * FROM user WHERE user.id = ?', id, function (error, results, fields) {

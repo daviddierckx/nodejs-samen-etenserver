@@ -57,7 +57,7 @@ exports.get_personal_details = function (req, res) {
     logger.log("Received request to get details about a user");
 
 
-    users_dao.get(req.params.mealId, (err, res2) => {
+    users_dao.getPersonalInfo(req.params.mealId, (err, res2) => {
         if (err) {
             logger.log("Error in details:", err);
             return res.status(404).send({ "success": false, "error": err });

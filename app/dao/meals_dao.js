@@ -2,8 +2,8 @@ const database = require("./database");
 
 
 exports.add = function (data, callback) {
-    database.con.query('INSERT INTO `meal` (`isActive`, `isVega`, `isVegan`, `isToTakeHome`, `dateTime`, `maxAmountOfParticipants`, `price`, `imageUrl`, `cookId `, `createDate`, `updateDate`, `name`, `description`, `allergenes`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-        [data.name, data.description, data.price, data.allergies, data.ingredients, data.studenthouse_id, data.offered_since, data.user_id], function (error, results, fields) {
+    database.con.query('INSERT INTO `meal` (`isActive`, `isVega`, `isVegan`, `isToTakeHome`, `dateTime`, `maxAmountOfParticipants`, `price`, `imageUrl`, `cookId`, `createDate`, `updateDate`, `name`, `description`, `allergenes`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        [data.isActive, data.isVega, data.isVegan, data.isToTakeHome, data.dateTime, data.maxAmountOfParticipants, data.price, data.imageUrl, data.cookId, data.createDate, data.updateDate, data.name, data.description, data.allergenes], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
             exports.get(results.insertId, callback);
@@ -11,7 +11,7 @@ exports.add = function (data, callback) {
 }
 
 exports.get = function (id, callback) {
-    database.con.query('SELECT meals.*, user.email_address AS user_email, CONCAT(user.firstname, \' \', user.lastname) AS user_fullname FROM meals LEFT JOIN user ON meals.user_id = user.id WHERE meals.id = ?', [id], function (error, results, fields) {
+    database.con.query('SELECT meal.*, user.emailAdress AS cook_user_email, CONCAT(user.firstName, \' \', user.lastName) AS cook_user_fullname FROM meal LEFT JOIN user ON meal.cookId = user.id WHERE meal.id = ?', [id], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
         if (results.length === 0) {
             return callback("meal-not-found", undefined);

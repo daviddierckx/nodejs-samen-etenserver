@@ -13,7 +13,7 @@ router.delete('/:homeId', studenthome_controller.house_delete_delete);
 router.put('/:homeId/user', studenthome_controller.house_add_user_put);
 
 
-router.post('/:homeId/meal/', meal_controller.create_post);
+router.post('/meal/', meal_controller.create_post);
 router.put('/:homeId/meal/:mealId', meal_controller.update_put);
 router.get('/:homeId/meal/', meal_controller.get_all_get);
 router.get('/:homeId/meal/:mealId', meal_controller.get_meal_details_get);

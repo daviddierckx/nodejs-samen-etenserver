@@ -2,7 +2,7 @@ const database = require("./database");
 
 
 exports.add = function (data, callback) {
-    database.con.query('INSERT INTO `meals` (`name`, `description`, `price`, `allergies`, `ingredients`, `studenthouse_id`, `offered_since`, `user_id`) VALUES (?,?,?,?,?,?,?,?)',
+    database.con.query('INSERT INTO `meal` (`isActive`, `isVega`, `isVegan`, `isToTakeHome`, `dateTime`, `maxAmountOfParticipants`, `price`, `imageUrl`, `cookId `, `createDate`, `updateDate`, `name`, `description`, `allergenes`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
         [data.name, data.description, data.price, data.allergies, data.ingredients, data.studenthouse_id, data.offered_since, data.user_id], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.affectedRows === 0) return callback("no-rows-affected", undefined);

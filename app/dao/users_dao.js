@@ -3,6 +3,7 @@ const config = require('./../config');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
+let userId = 0;
 
 exports.add = function (data, callback) {
     jwt.sign({ data: data.email_address }, config.auth.secret, { expiresIn: '1h' }, (err, res) => {
@@ -35,6 +36,7 @@ exports.generateNewToken = function (email, user_id, callback) {
             [res, email, user_id], function (error, results, fields) {
                 if (error) return callback(error.sqlMessage, undefined);
                 if (results.affectedRows === 0) return callback("failed to update token", undefined);
+                userId = user_id
                 callback(undefined, { token: res, user_id: user_id });
             });
     });
@@ -42,6 +44,16 @@ exports.generateNewToken = function (email, user_id, callback) {
 
 
 exports.get = function (id, callback) {
+    database.con.query('SELECT * FROM user WHERE user.id = ?', id, function (error, results, fields) {
+        if (error) return callback(error.sqlMessage, undefined);
+        if (results.length === 0) {
+            return callback("user-not-found", undefined);
+        }
+        callback(undefined, results[0]);
+    });
+}
+
+exports.getUserById = function (id, callback) {
     database.con.query('SELECT * FROM user WHERE user.id = ?', [id], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
         if (results.length === 0) {
@@ -49,4 +61,23 @@ exports.get = function (id, callback) {
         }
         callback(undefined, results[0]);
     });
+}
+
+exports.update = function (id, data, callback) {
+    id = parseInt(id);
+    database.con.query('UPDATE `user` SET `firstName`=?, `lastName`=?, `isActive`=?, `emailAdress`=?, `phoneNumber`=?, `roles`=?, `street`=?, `city`=? WHERE user.id=?',
+        [data.firstName, data.lastName, data.isActive, data.emailAdress, data.phoneNumber, data.roles, data.street, data.city, id], function (error, results, fields) {
+            if (error) return callback(error.sqlMessage, undefined);
+            if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
+            exports.get(id, callback);
+        });
+}
+
+exports.remove = function (id, callback) {
+    database.con.query('DELETE FROM `user` WHERE id=?',
+        [id], function (error, results, fields) {
+            if (error) return callback(error.sqlMessage, undefined);
+            if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
+            callback(undefined, id);
+        });
 }

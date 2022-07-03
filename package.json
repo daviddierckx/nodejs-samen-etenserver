@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/david/avans-1.4-nodejs-project#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",

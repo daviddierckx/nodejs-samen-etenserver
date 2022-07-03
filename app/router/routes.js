@@ -22,7 +22,7 @@ router.use(function timeLog(req, res, next) {
     }
 
     logger.log("User authentication started");
-    const token = (req.header("authorization") ?? "").replace('Bearer ', '');
+    const token = (req.header("authorization") || "").replace('Bearer ', '');
     console.log("token: ", token);
 
     jwt.verify(token, config.auth.secret, {}, function (err, decoded) {

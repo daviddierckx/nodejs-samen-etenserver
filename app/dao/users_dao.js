@@ -100,3 +100,20 @@ exports.addUserToMeal = function (id, callback) {
             exports.get(id, callback);
         });
 }
+
+exports.RemoveUserToMeal = function (id, callback) {
+
+    database.con.query('DELETE FROM `meal_participants_user` WHERE userId=?',
+        [userId], function (error, results, fields) {
+            if (error) return callback(error.sqlMessage, undefined);
+            if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
+            callback(undefined);
+        });
+}
+
+exports.getDetailsParticipant = function (mealId, participantId, callback) {
+    database.con.query('SELECT meal_participants_user.*, user.emailAdress AS user_email, CONCAT(user.firstName, user.lastName) AS user_fullname FROM meal_participants_user LEFT JOIN user ON meal_participants_user.userId = user.id WHERE mealId= ? AND userId = ?', [mealId, participantId], function (error, results, fields) {
+        if (error) return callback(error.sqlMessage, undefined);
+        callback(undefined, results);
+    });
+}

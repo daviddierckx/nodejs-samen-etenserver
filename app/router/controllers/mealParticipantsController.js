@@ -16,16 +16,38 @@ exports.signup_post = function (req, res) {
 };
 
 exports.signoff_put = function (req, res) {
-    logger.log("Received request to signoff a meal");
-    return res.status(500).send({ "success": false, "error": "not implemented yet" });
+    users.RemoveUserToMeal(req.params.mealId, (err2, res2) => {
+        if (err2) {
+            logger.log("Error in creating participant:", err2);
+            return res.status(400).send({ "success": false, "error": err2 });
+        }
+        logger.log("Added to Meal created:", JSON.stringify(res2));
+        return res.status(201).send({ "success": true, "participant": res2 });
+    });;
 };
 
 exports.get_participants_get = function (req, res) {
     logger.log("Received request to get participants of a meal");
-    return res.status(500).send({ "success": false, "error": "not implemented yet" });
+
+
+    meals_participants_dao.getAll(req.params.mealId, (err, res2) => {
+        if (err) {
+            logger.log("Error in details:", err);
+            return res.status(404).send({ "success": false, "error": err });
+        }
+        logger.log("Returning meal participants details:", JSON.stringify(res2));
+        return res.status(200).send({ "success": true, "meal": res2 });
+    });
 };
 
 exports.get_participant_details_get = function (req, res) {
     logger.log("Received request to get meal participant details");
-    return res.status(500).send({ "success": false, "error": "not implemented yet" });
+    users.getDetailsParticipant(req.params.mealId, req.params.participantId, (err, res2) => {
+        if (err) {
+            logger.log("Error in details:", err);
+            return res.status(404).send({ "success": false, "error": err });
+        }
+        logger.log("Returning meal participants details:", JSON.stringify(res2));
+        return res.status(200).send({ "success": true, "meal": res2 });
+    });
 };

@@ -31,8 +31,8 @@ exports.remove = function (id, callback) {
 }
 
 exports.update = function (id, data, callback) {
-    database.con.query('UPDATE `meals` SET `name`=?, `description`=?, `price`=?, `allergies`=?, `ingredients`=?, `offered_since`=? WHERE id=?',
-        [data.name, data.description, data.price, data.allergies, data.ingredients, data.offered_since, id], function (error, results, fields) {
+    database.con.query('UPDATE `meal` SET `isActive`=?, `isVega`=?, `isVegan`=?, `isToTakeHome`=?, `dateTime`=?, `maxAmountOfParticipants`=?, `price`=?, `imageUrl`=?, `cookId`=?, `createDate`=?, `updateDate`=?, `name`=?, `description`=?, `allergenes`=?  WHERE id=?',
+        [data.isActive, data.isVega, data.isVegan, data.isToTakeHome, data.dateTime, data.maxAmountOfParticipants, data.price, data.imageUrl, data.cookId, data.createDate, data.updateDate, data.name, data.description, data.allergenes, id], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
             //Return updated house

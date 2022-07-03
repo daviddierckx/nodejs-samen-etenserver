@@ -48,9 +48,7 @@ exports.update_put = function (req, res) {
     let check = request_utils.verifyBody(req, res, 'name', 'string');
     check = check && request_utils.verifyBody(req, res, 'description', 'string');
     check = check && request_utils.verifyBody(req, res, 'price', 'float');
-    check = check && request_utils.verifyBody(req, res, 'allergies', 'string');
-    check = check && request_utils.verifyBody(req, res, 'ingredients', 'string');
-    check = check && request_utils.verifyBody(req, res, 'offered_since', 'date');
+    check = check && request_utils.verifyBody(req, res, 'allergenes', 'string');
     if (!check) {
         logger.log("Request cancelled because of an invalid param");
         return;
@@ -62,28 +60,32 @@ exports.update_put = function (req, res) {
             logger.log("Error in update:", err);
             return res.status(404).send({ "success": false, "error": err });
         }
-        meals_dao.checkIfUserIsAdmin(req.params.mealId, req.user_id, (err, user_verified) => {
+
+        meals_dao.update(req.params.mealId, {
+            isActive: req.body.isActive,
+            isVega: req.body.isVega,
+            isVegan: req.body.isVegan,
+            isToTakeHome: req.body.isToTakeHome,
+            dateTime: new Date(req.body.dateTime),
+            maxAmountOfParticipants: req.body.maxAmountOfParticipants,
+            price: req.body.price,
+            imageUrl: req.body.imageUrl,
+            cookId: req.body.cookId,
+            createDate: new Date(req.body.createDate),
+            updateDate: new Date(req.body.updateDate),
+            name: req.body.name,
+            description: req.body.description,
+            allergenes: req.body.allergenes,
+        }, (err, res2) => {
             if (err) {
                 logger.log("Error in update:", err);
-                return res.status(401).send({ "success": false, "error": err });
+                return res.status(400).send({ "success": false, "error": err });
             }
-            meals_dao.update(req.params.mealId, {
-                name: req.body.name,
-                description: req.body.description,
-                price: req.body.price,
-                allergies: req.body.allergies,
-                ingredients: req.body.ingredients,
-                offered_since: new Date(req.body.offered_since),
-            }, (err, res2) => {
-                if (err) {
-                    logger.log("Error in update:", err);
-                    return res.status(400).send({ "success": false, "error": err });
-                }
-                logger.log("Updated meal successfully with data", JSON.stringify(res2));
-                return res.status(202).send({ "success": true, "meal": res2 });
-            });
+            logger.log("Updated meal successfully with data", JSON.stringify(res2));
+            return res.status(202).send({ "success": true, "meal": res2 });
         });
     });
+
 };
 
 exports.delete = function (req, res) {

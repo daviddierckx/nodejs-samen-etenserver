@@ -14,7 +14,7 @@ const meal_participants_controller = require('./controllers/mealParticipantsCont
 
 
 router.post('/meal/', meal_controller.create_post);
-// router.put('/:homeId/meal/:mealId', meal_controller.update_put);
+router.put('/meal/:mealId', meal_controller.update_put);
 router.get('/meal', meal_controller.get_all_get);
 router.get('/meal/:mealId', meal_controller.get_meal_details_get);
 router.delete('/meal/:mealId', meal_controller.delete);

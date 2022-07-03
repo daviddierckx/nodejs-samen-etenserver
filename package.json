@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Avans school project",
   "main": "server.js",
+  "engines": {
+    "node": "12.11.1"
+  },
   "scripts": {
+    "start": "nodemon --exec babel-node ./server.js",
     "test": "mocha -reporter spec test/**/*.test.js --exit",
     "test-win": "cls && npm run test",
     "coverage": "nyc --reporter=lcov npm run test",
@@ -24,6 +28,9 @@
   },
   "homepage": "https://github.com/david/avans-1.4-nodejs-project#readme",
   "dependencies": {
+    "@babel/core": "^7.18.6",
+    "@babel/node": "^7.18.6",
+    "babel-node": "^0.0.1-security",
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",

@@ -21,18 +21,7 @@ variables:
   # DOCKER_HOST: tcp://docker:2375/
   # DOCKER_DRIVER: overlay2
 
-#
-# Testing nodejes backend
-# Our server uses a MySql database, so to run our testcases we also need a database.
-# We do NOT use the online production database, but spawn an independent test-db on Gitlab.
-# To do so, we have to install it into the container where we run our testcases.
-#
-testing:
-  stage: test
-  image: node:latest
-  script:
-    - npm i -D mocha
-    - npm run test
+
 #
 # Deploy to Heroku
 # DPL is a deploy tool made for continuous deployment that’s developed and used
@@ -54,3 +43,16 @@ production:
     - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
   only:
     - main
+
+#
+# Testing nodejes backend
+# Our server uses a MySql database, so to run our testcases we also need a database.
+# We do NOT use the online production database, but spawn an independent test-db on Gitlab.
+# To do so, we have to install it into the container where we run our testcases.
+#
+testing:
+  stage: test
+  image: node:latest
+  script:
+    - npm i -D mocha
+    - npm run test

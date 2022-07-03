@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/onno204/avans-1.4-nodejs-project.git"
+    "url": "git+https://github.com/david/avans-1.4-nodejs-project.git"
   },
-  "author": "onno204",
+  "author": "david",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/onno204/avans-1.4-nodejs-project/issues"
+    "url": "https://github.com/david/avans-1.4-nodejs-project/issues"
   },
-  "homepage": "https://github.com/onno204/avans-1.4-nodejs-project#readme",
+  "homepage": "https://github.com/david/avans-1.4-nodejs-project#readme",
   "dependencies": {
     "dotenv": "^9.0.2",
     "express": "^4.17.1",

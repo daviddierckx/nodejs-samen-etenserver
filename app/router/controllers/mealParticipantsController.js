@@ -10,7 +10,7 @@ exports.signup_post = function (req, res) {
             logger.log("Error in creating participant:", err2);
             return res.status(400).send({ "success": false, "error": err2 });
         }
-        logger.log("Added to Meal created:", JSON.stringify(res2));
+        logger.log("Added to participant reated:", JSON.stringify(res2));
         return res.status(201).send({ "success": true, "participant": res2 });
     });
 };
@@ -21,7 +21,7 @@ exports.signoff_put = function (req, res) {
             logger.log("Error in creating participant:", err2);
             return res.status(400).send({ "success": false, "error": err2 });
         }
-        logger.log("Added to Meal created:", JSON.stringify(res2));
+        logger.log("Signed off participant:", JSON.stringify(res2));
         return res.status(201).send({ "success": true, "participant": res2 });
     });;
 };
@@ -35,7 +35,7 @@ exports.get_participants_get = function (req, res) {
             logger.log("Error in details:", err);
             return res.status(404).send({ "success": false, "error": err });
         }
-        logger.log("Returning meal participants details:", JSON.stringify(res2));
+        logger.log("Returning all meal participants details:", JSON.stringify(res2));
         return res.status(200).send({ "success": true, "meal": res2 });
     });
 };

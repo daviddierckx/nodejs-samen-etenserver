@@ -8,8 +8,8 @@
 # image: node:latest
 
 stages:
-  - test
   - production
+  - test
 
 #
 # Global variables

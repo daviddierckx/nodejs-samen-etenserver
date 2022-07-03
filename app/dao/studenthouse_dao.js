@@ -1,7 +1,7 @@
 const database = require("./database");
 
 exports.add = function (data, callback) {
-    database.con.query('INSERT INTO `studenthome` (`Name`, `Address`, `House_Nr`, `Postal_Code`, `City`, `Telephone`, `UserID`) VALUES (?,?,?,?,?,?,?)',
+    database.con.query('INSERT INTO `studenthouses` (`name`, `street`, `housenumber`, `postalcode`, `city`, `phonenumber`, `user_id`) VALUES (?,?,?,?,?,?,?)',
         [data.name, data.street, data.housenumber, data.postalcode, data.city, data.phonenumber, data.user_id], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
@@ -11,7 +11,7 @@ exports.add = function (data, callback) {
 
 exports.remove = function (id, callback) {
     id = parseInt(id);
-    database.con.query('DELETE FROM `studenthome` WHERE id=?',
+    database.con.query('DELETE FROM `studenthouses` WHERE id=?',
         [id], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
@@ -20,7 +20,7 @@ exports.remove = function (id, callback) {
 }
 
 exports.get = function (id, callback) {
-    database.con.query('SELECT * FROM studenthome WHERE studenthome.ID = ?', [id], function (error, results, fields) {
+    database.con.query('SELECT studenthouses.*, user.emailAdress AS user_email, CONCAT(user.firstName, \' \', user.lastName) AS user_fullname FROM studenthouses LEFT JOIN user ON studenthouses.user_id = user.id WHERE studenthouses.id = ?', [id], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
         if (results.length === 0) {
             return callback("house-not-found", undefined);
@@ -30,10 +30,10 @@ exports.get = function (id, callback) {
 }
 
 exports.checkIfUserIsAdmin = function (id, user_id, callback) {
-    database.con.query('SELECT studenthome.*, user.Email AS user_email, CONCAT(user.First_Name, user.Last_Name) AS user_fullname FROM studenthome LEFT JOIN user ON studenthome.UserID = user.ID WHERE studenthome.ID = ? AND studenthome.UserID = ?', [id, user_id], function (error, results, fields) {
+    database.con.query('SELECT studenthouses.*, user.emailAdress AS user_email, CONCAT(user.firstName, \' \', user.lastName) AS user_fullname FROM studenthouses LEFT JOIN user ON studenthouses.user_id = user.id WHERE studenthouses.id = ? AND studenthouses.user_id = ?', [id, user_id], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
         if (results.length === 0) {
-            database.con.query('SELECT * FROM home_administrators WHERE home_administrators.StudenthomeID = ? AND home_administrators.UserID = ?', [id, user_id], function (error, results, fields) {
+            database.con.query('SELECT * FROM users_studenthouses WHERE users_studenthouses.studenthouseId = ? AND users_studenthouses.userId = ?', [id, user_id], function (error, results, fields) {
                 if (error) return callback(error.sqlMessage, undefined);
                 if (results.length === 0) {
                     return callback("house-not-owned-by-user", undefined);
@@ -47,7 +47,7 @@ exports.checkIfUserIsAdmin = function (id, user_id, callback) {
 }
 
 exports.update = function (id, data, callback) {
-    database.con.query('UPDATE `studenthome` SET `Name`=?, `Address`=?, `House_Nr`=?, `Postal_Code`=?, `City`=?, `Telephone`=? WHERE id=?',
+    database.con.query('UPDATE `studenthouses` SET `name`=?, `street`=?, `housenumber`=?, `postalcode`=?, `city`=?, `phonenumber`=? WHERE id=?',
         [data.name, data.street, data.housenumber, data.postalcode, data.city, data.phonenumber, id], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
@@ -59,7 +59,7 @@ exports.update = function (id, data, callback) {
 exports.getAll = function (name, city, callback) {
     const query_name = `${name ?? ""}%`;
     const query_city = `${city ?? ""}%`;
-    database.con.query('SELECT * FROM studenthome WHERE studenthome.city LIKE ? AND studenthome.name LIKE ?',
+    database.con.query('SELECT studenthouses.*, user.emailAdress AS user_email, CONCAT(user.firstName, \' \', user.lastName) AS user_fullname FROM studenthouses LEFT JOIN user ON studenthouses.user_id = user.id WHERE studenthouses.city LIKE ? AND studenthouses.name LIKE ?',
         [query_city, query_name], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.length === 0 && (name || city)) {
@@ -70,7 +70,7 @@ exports.getAll = function (name, city, callback) {
 }
 
 exports.addUserToHouse = function (id, user_id, callback) {
-    database.con.query('INSERT INTO `home_administrators` (`StudenthomeID`, `UserID`) VALUES (?,?)',
+    database.con.query('INSERT INTO `users_studenthouses` (`studenthouseId`, `userId`) VALUES (?,?)',
         [id, user_id], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.affectedRows === 0) return callback("no-rows-affected", undefined);

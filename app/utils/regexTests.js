@@ -16,3 +16,4 @@ exports.regexTestPhonenumber = function (input) {
     return /(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/i.test(input)
 }
 
+

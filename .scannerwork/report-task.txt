@@ -1,6 +1,6 @@
-projectKey=nodejs-sameneten
+projectKey=cRz17jd6lbSenltTMa4XcRz17jd6lbSenltTMa4XcRz17jd6lbSenltTMa4XcRz17jd6lbSenltTMa4X
 serverUrl=http://sonarqube.avans-informatica-breda.nl
 serverVersion=7.4.0.18908
-dashboardUrl=http://sonarqube.avans-informatica-breda.nl/dashboard?id=nodejs-sameneten
-ceTaskId=AXlc64TlTNm1xigl99qL
-ceTaskUrl=http://sonarqube.avans-informatica-breda.nl/api/ce/task?id=AXlc64TlTNm1xigl99qL
+dashboardUrl=http://sonarqube.avans-informatica-breda.nl/dashboard?id=cRz17jd6lbSenltTMa4XcRz17jd6lbSenltTMa4XcRz17jd6lbSenltTMa4XcRz17jd6lbSenltTMa4X
+ceTaskId=AXmGaNS8TNm1xigl995k
+ceTaskUrl=http://sonarqube.avans-informatica-breda.nl/api/ce/task?id=AXmGaNS8TNm1xigl995k

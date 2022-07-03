@@ -1,7 +1,7 @@
-const meals_dao = require('../dao/meal.dao');
-const studenthouse_dao = require('../dao/studenthome.dao');
-const users_dao = require('../dao/user.dao');
-const request_utils = require('../utils/verifyUtils');
+const meals_dao = require('./../../dao/meals_dao');
+const studenthouse_dao = require('./../../dao/studenthouse_dao');
+const users_dao = require('./../../dao/users_dao');
+const request_utils = require('./../../utils/requestUtils');
 const logger = require('tracer').console()
 
 
@@ -25,14 +25,15 @@ exports.house_create_post = function (req, res) {
         postalcode: req.body.postalcode,
         city: req.body.city,
         phonenumber: req.body.phonenumber,
-        user_id: req.body.user_id
+        user_id: req.user_id
     }, (err2, res2) => {
         if (err2) {
             logger.log("Error in creation:", err2);
             return res.status(400).send({ "success": false, "error": err2 });
         }
         logger.log("Studenthouse created with data", res2);
-        return res.status(201).send({ "success": true, "house": res2 });
+        return res.status(201).send({ "success": true, "house": res2, });
+        // "Student ID": res2.userId 
     })
 };
 
@@ -86,7 +87,7 @@ exports.house_update_put = function (req, res) {
         return;
     }
 
-    logger.log("Studenthome update with id", req.params.homeId);
+    logger.log("Studenthouse update with id", req.params.homeId);
     studenthouse_dao.checkIfUserIsAdmin(req.params.homeId, req.user_id, (err, user_verified) => {
         if (err) {
             logger.log("Error in update:", err);
@@ -126,7 +127,7 @@ exports.house_delete_delete = function (req, res) {
         }
         studenthouse_dao.checkIfUserIsAdmin(req.params.homeId, req.user_id, (err, user_verified) => {
             if (err) {
-                logger.log("Error in delete:", err);
+                logger.log("Error in update:", err);
                 return res.status(401).send({ "success": false, "error": err });
             }
             studenthouse_dao.remove(req.params.homeId, (err, res2) => {

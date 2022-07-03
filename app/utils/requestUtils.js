@@ -1,5 +1,5 @@
 const logger = require('tracer').console()
-const regexTests = require("./validatorsUtils");
+const regexTests = require("./regexTests");
 
 exports.verifyParam = function (req, res, paramName, paramType) {
     const success = exports.verifyValue(req.params[paramName], paramType);

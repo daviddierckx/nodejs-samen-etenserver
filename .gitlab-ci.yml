@@ -32,11 +32,11 @@ unittests:
   stage: test
   variables:
     NODE_ENV: development
-    # DB_USER: $DB_USER
-    # DB_PASSWORD: $DB_PASSWORD
-    # DB_HOST: $DB_HOST
-    # DB_PORT: $DB_PORT
-    # DB_DATABASE: $DB_DATABASE
+    DB_USER: $DB_USER
+    DB_PASSWORD: $DB_PASSWORD
+    DB_HOST: $DB_HOST
+    DB_PORT: $DB_PORT
+    DB_DATABASE: $DB_DATABASE
   before_script:
     - npm install --no-optional
   script:
@@ -66,25 +66,25 @@ unittests:
 # DPL is a deploy tool made for continuous deployment that’s developed and used
 # by Travis CI, but can also be used with GitLab CI.
 # https://docs.gitlab.com/ee/ci/examples/deployment/#using-dpl-with-docker
-#
-production:
-  type: deploy
-  stage: deploy
-  image: ruby:latest
-  script:
-    # Get your key at https://dashboard.heroku.com/account
-    # and add it to your project environment variables at GitLab.
-    - echo "Heroku api key = $HEROKU_API_KEY"
-    # The name of your app at Heroku. See https://dashboard.heroku.com/apps.
-    - echo "Heroku appname = $HEROKU_APP_NAME"
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
-  only:
-    - main
 
-# #
+# production:
+  # type: deploy
+  # stage: deploy
+  # image: ruby:latest
+  # script:
+  #   # Get your key at https://dashboard.heroku.com/account
+  #   # and add it to your project environment variables at GitLab.
+  #   - echo "Heroku api key = $HEROKU_API_KEY"
+  #   # The name of your app at Heroku. See https://dashboard.heroku.com/apps.
+  #   - echo "Heroku appname = $HEROKU_APP_NAME"
+  #   - apt-get update -qy
+  #   - apt-get install -y ruby-dev
+  #   - gem install dpl
+  #   - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+  # only:
+  #   - main
+
+
 # # Example: Deploy to Google Firebase, as an alternative to Heroku
 # #
 # firebase:

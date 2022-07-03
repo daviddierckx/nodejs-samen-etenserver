@@ -38,7 +38,7 @@ unittests:
     # DB_PORT: $DB_PORT
     # DB_DATABASE: $DB_DATABASE
   before_script:
-    - npm install --no-optional
+    - npm install
   script:
     - npm run test
     # - npm run sonar

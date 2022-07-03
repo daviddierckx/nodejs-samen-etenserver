@@ -68,7 +68,6 @@ unittests:
 # https://docs.gitlab.com/ee/ci/examples/deployment/#using-dpl-with-docker
 #
 production:
-  type: deploy
   stage: deploy
   image: ruby:latest
   script:

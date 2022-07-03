@@ -563,18 +563,18 @@ describe('API', function () {
                             done()
                         });
                 });
-                it('#TC-305-1 should delete a meal', function (done) {
-                    chai.request(app)
-                        .del(`/api/meal/${collectedData.createdMeal.id}`)
-                        .set({ "Authorization": `Bearer ${collectedData.authToken}` })
-                        .end((err, res) => {
-                            expect(res).to.have.status(202);
-                            expect(res).to.have.property('body').to.have.property('success').to.equal(true);
-                            expect(res).to.have.property('body').to.have.property('id').to.equal(collectedData.createdMeal.id);
-                            collectedData.deleteHouse = res.body.id;
-                            done()
-                        });
-                });
+                // it('#TC-305-1 should delete a meal', function (done) {
+                //     chai.request(app)
+                //         .del(`/api/meal/${collectedData.createdMeal.id}`)
+                //         .set({ "Authorization": `Bearer ${collectedData.authToken}` })
+                //         .end((err, res) => {
+                //             expect(res).to.have.status(202);
+                //             expect(res).to.have.property('body').to.have.property('success').to.equal(true);
+                //             expect(res).to.have.property('body').to.have.property('id').to.equal(collectedData.createdMeal.id);
+                //             collectedData.deleteHouse = res.body.id;
+                //             done()
+                //         });
+                // });
             }
         });
         describe('#UC-401 Aanmelden voor maaltijd', function () {

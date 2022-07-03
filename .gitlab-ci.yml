@@ -5,62 +5,34 @@
 # Secure Variables like $DB_PASSWORD can added by going to your
 # project’s Settings ➔ CI / CD ➔ Variables on the GitLab website.
 #
-image: node:latest
+# image: node:latest
 
 stages:
   - test
-  - metrics
-  - deploy
-
-cache:
-  key: $CI_COMMIT_REF_SLUG
-  paths:
-    - node_modules
+  - production
 
 #
 # Global variables
 #
 variables:
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
+  # Configure mysql environment variables (https://hub.docker.com/_/mysql/)
+  MYSQL_DATABASE: my_mysql_database
+  MYSQL_ROOT_PASSWORD: some_secret_password
+  # DOCKER_HOST: tcp://docker:2375/
+  # DOCKER_DRIVER: overlay2
 
 #
-# Run unittests
+# Testing nodejes backend
+# Our server uses a MySql database, so to run our testcases we also need a database.
+# We do NOT use the online production database, but spawn an independent test-db on Gitlab.
+# To do so, we have to install it into the container where we run our testcases.
 #
-unittests:
-  image: markhobson/node-chrome:latest
+testing:
   stage: test
-  variables:
-    NODE_ENV: development
-    # DB_USER: $DB_USER
-    # DB_PASSWORD: $DB_PASSWORD
-    # DB_HOST: $DB_HOST
-    # DB_PORT: $DB_PORT
-    # DB_DATABASE: $DB_DATABASE
-  before_script:
-    - npm install --no-optional
+  image: node:latest
   script:
+    - npm i -D mocha
     - npm run test
-    # - npm run sonar
-  only:
-    - main
-
-#
-# Run end-to-end tests
-#
-# end2end:
-#   image: markhobson/node-chrome:latest
-#   stage: test
-#   variables:
-#     NODE_ENV: development
-#   before_script:
-#     - npm install --no-optional
-#   script:
-#     - google-chrome --version
-#     # - node ./node_modules/protractor/bin/webdriver-manager update --versions.chrome=76.0.3809.100
-#     - node ./node_modules/protractor/bin/webdriver-manager update
-#     - npm run e2e
-
 #
 # Deploy to Heroku
 # DPL is a deploy tool made for continuous deployment that’s developed and used
@@ -68,7 +40,8 @@ unittests:
 # https://docs.gitlab.com/ee/ci/examples/deployment/#using-dpl-with-docker
 #
 production:
-  stage: deploy
+  type: deploy
+  stage: production
   image: ruby:latest
   script:
     # Get your key at https://dashboard.heroku.com/account
@@ -81,20 +54,61 @@ production:
     - gem install dpl
     - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
   only:
-    - main
+    - master
+#
+# GitLab example CI/CD script
+# See https://docs.gitlab.com/ee/ci/yaml/README.html
+#
+# Secure Variables like $DB_PASSWORD can added by going to your
+# project’s Settings ➔ CI / CD ➔ Variables on the GitLab website.
+#
+# image: node:latest
+
+stages:
+  - test
+  - production
 
 #
-# Example: Deploy to Google Firebase, as an alternative to Heroku
+# Global variables
 #
-# firebase:
-#   stage: deploy
-#   image: markhobson/node-chrome:latest
-#   before_script:
-#     - npm i --no-optional
-#     - npm i -g firebase-tools
-#   script:
-#     - npm run build
-#     - firebase deploy --token $FIREBASE_TOKEN
-#   only:
-#     # - master
-#     - firebase-branch
+variables:
+  # Configure mysql environment variables (https://hub.docker.com/_/mysql/)
+  MYSQL_DATABASE: my_mysql_database
+  MYSQL_ROOT_PASSWORD: some_secret_password
+  # DOCKER_HOST: tcp://docker:2375/
+  # DOCKER_DRIVER: overlay2
+
+#
+# Testing nodejes backend
+# Our server uses a MySql database, so to run our testcases we also need a database.
+# We do NOT use the online production database, but spawn an independent test-db on Gitlab.
+# To do so, we have to install it into the container where we run our testcases.
+#
+testing:
+  stage: test
+  image: node:latest
+  script:
+    - npm i -D mocha
+    - npm run test
+#
+# Deploy to Heroku
+# DPL is a deploy tool made for continuous deployment that’s developed and used
+# by Travis CI, but can also be used with GitLab CI.
+# https://docs.gitlab.com/ee/ci/examples/deployment/#using-dpl-with-docker
+#
+production:
+  type: deploy
+  stage: production
+  image: ruby:latest
+  script:
+    # Get your key at https://dashboard.heroku.com/account
+    # and add it to your project environment variables at GitLab.
+    - echo "Heroku api key = $HEROKU_API_KEY"
+    # The name of your app at Heroku. See https://dashboard.heroku.com/apps.
+    - echo "Heroku appname = $HEROKU_APP_NAME"
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+  only:
+    - master

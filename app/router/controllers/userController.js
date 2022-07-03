@@ -1,6 +1,7 @@
 const users_dao = require('./../../dao/users_dao');
 const request_utils = require('./../../utils/requestUtils');
 const logger = require('tracer').console()
+const meals_participants_dao = require('./../../dao/meals_participants_dao');
 
 
 exports.register = function (req, res) {

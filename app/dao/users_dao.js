@@ -5,6 +5,7 @@ const crypto = require('crypto');
 
 let userId = 0;
 
+
 exports.add = function (data, callback) {
     jwt.sign({ data: data.email_address }, config.auth.secret, { expiresIn: '1h' }, (err, res) => {
         if (err) return callback("error-while-creating-token", undefined);
@@ -87,5 +88,15 @@ exports.remove = function (id, callback) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
             callback(undefined, id);
+        });
+}
+
+exports.addUserToMeal = function (id, callback) {
+
+    database.con.query('INSERT INTO `meal_participants_user` (`mealId`, `userId`) VALUES (?,?)',
+        [id, userId], function (error, results, fields) {
+            if (error) return callback(error.sqlMessage, undefined);
+            if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
+            exports.get(id, callback);
         });
 }

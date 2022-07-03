@@ -19,7 +19,7 @@ router.get('/meal', meal_controller.get_all_get);
 router.get('/meal/:mealId', meal_controller.get_meal_details_get);
 router.delete('/meal/:mealId', meal_controller.delete);
 
-router.post('/:homeId/meal/:mealId/signup', meal_participants_controller.signup_post);
+router.post('/meal/:mealId/participate', meal_participants_controller.signup_post);
 router.put('/:homeId/meal/:mealId/signoff', meal_participants_controller.signoff_put);
 
 module.exports = router

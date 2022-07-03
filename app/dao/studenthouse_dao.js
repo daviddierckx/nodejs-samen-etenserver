@@ -57,8 +57,8 @@ exports.update = function (id, data, callback) {
 }
 
 exports.getAll = function (name, city, callback) {
-    const query_name = `${name ?? ""}%`;
-    const query_city = `${city ?? ""}%`;
+    const query_name = `${name || ""}%`;
+    const query_city = `${city || ""}%`;
     database.con.query('SELECT studenthouses.*, user.emailAdress AS user_email, CONCAT(user.firstName, \' \', user.lastName) AS user_fullname FROM studenthouses LEFT JOIN user ON studenthouses.user_id = user.id WHERE studenthouses.city LIKE ? AND studenthouses.name LIKE ?',
         [query_city, query_name], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);

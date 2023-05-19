@@ -39,7 +39,8 @@
     "mysql": "^2.18.1",
     "password-hash": "^1.2.2",
     "sonar-scanner": "^3.1.0",
-    "tracer": "^1.1.4"
+    "tracer": "^1.1.4",
+    "util": "^0.12.5"
   },
   "devDependencies": {
     "chai": "^4.3.4",

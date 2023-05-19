@@ -62,6 +62,19 @@ exports.get = function (id, callback) {
     });
 }
 
+exports.getAll = function (name, city, callback) {
+    const query_name = `${name || ""}%`;
+    const query_city = `${city || ""}%`;
+    database.con.query('SELECT * FROM user WHERE city LIKE ? AND lastName LIKE ?',
+        [query_city, query_name], function (error, results, fields) {
+            if (error) return callback(error.sqlMessage, undefined);
+            if (results.length === 0 && (name || city)) {
+                return callback("no-user-matched-criteria", undefined);
+            }
+            callback(undefined, results);
+        });
+}
+
 exports.getUserById = function (id, callback) {
     database.con.query('SELECT * FROM user WHERE user.id = ?', [id], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
@@ -91,23 +104,23 @@ exports.remove = function (id, callback) {
         });
 }
 
-exports.addUserToMeal = function (id, callback) {
+exports.addUserToMeal = function (id, myUserId, callback) {
 
     database.con.query('INSERT INTO `meal_participants_user` (`mealId`, `userId`) VALUES (?,?)',
-        [id, userId], function (error, results, fields) {
+        [id, myUserId], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
-            exports.get(id, callback);
+            exports.get(myUserId, callback);
         });
 }
 
-exports.RemoveUserToMeal = function (id, callback) {
+exports.RemoveUserToMeal = function (id, myUserId, callback) {
 
-    database.con.query('DELETE FROM `meal_participants_user` WHERE userId=?',
-        [userId], function (error, results, fields) {
+    database.con.query('DELETE FROM `meal_participants_user` WHERE userId=? AND mealId=?',
+        [myUserId, id], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
             if (results.affectedRows === 0) return callback("no-rows-affected", undefined);
-            callback(undefined);
+            callback(undefined, myUserId);
         });
 }
 

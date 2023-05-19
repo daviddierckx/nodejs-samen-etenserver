@@ -26,8 +26,8 @@ exports.create_post = function (req, res) {
         maxAmountOfParticipants: req.body.maxAmountOfParticipants,
         price: req.body.price,
         imageUrl: req.body.imageUrl,
-        cookId: req.body.cookId,
-        createDate: new Date(req.body.createDate),
+        cookId: req.user_id,
+        createDate: new Date(),
         updateDate: new Date(req.body.updateDate),
         name: req.body.name,
         description: req.body.description,
@@ -38,7 +38,7 @@ exports.create_post = function (req, res) {
             return res.status(400).send({ "success": false, "error": err2 });
         }
         logger.log("Meal created:", JSON.stringify(res2));
-        return res.status(201).send({ "success": true, "meal": res2 });
+        return res.status(201).send({ "success": true, "message": "Meal successfully Created", "meal": res2 });
     });
 
 };
@@ -61,6 +61,11 @@ exports.update_put = function (req, res) {
             return res.status(404).send({ "success": false, "error": err });
         }
 
+        // Compare the cook ID in the request with the authenticated user's ID
+        if (res2.cookId.toString() !== req.user_id.toString()) {
+            return res.status(403).send({ "success": false, "error": "You are only authorized to update your own meal data, not that of others" });
+        }
+
         meals_dao.update(req.params.mealId, {
             isActive: req.body.isActive,
             isVega: req.body.isVega,
@@ -81,8 +86,11 @@ exports.update_put = function (req, res) {
                 logger.log("Error in update:", err);
                 return res.status(400).send({ "success": false, "error": err });
             }
+
+
+
             logger.log("Updated meal successfully with data", JSON.stringify(res2));
-            return res.status(202).send({ "success": true, "meal": res2 });
+            return res.status(202).send({ "success": true, "message": "Meal successfully Updated", "meal": res2 });
         });
     });
 
@@ -102,13 +110,18 @@ exports.delete = function (req, res) {
             return res.status(404).send({ "success": false, "error": err });
         }
 
+        // Compare the cook ID in the request with the authenticated user's ID
+        if (res2.cookId.toString() !== req.user_id.toString()) {
+            return res.status(403).send({ "success": false, "error": "You are only authorized to delete your own meal data, not that of others" });
+        }
+
         meals_dao.remove(req.params.mealId, (err, res2) => {
             if (err) {
                 logger.log("Error in removal:", err);
                 return res.status(400).send({ "success": false, "error": err });
             }
             logger.log("Removed meal successfully");
-            return res.status(202).send({ "success": true, "id": res2 });
+            return res.status(202).send({ "success": true, "message": "Meal successfully deleted. Deletion confirmed.", "id": res2 });
         });
     });
 
@@ -140,6 +153,6 @@ exports.get_meal_details_get = function (req, res) {
             return res.status(404).send({ "success": false, "error": err });
         }
         logger.log("Returning meal details:", JSON.stringify(res2));
-        return res.status(200).send({ "success": true, "meal": res2 });
+        return res.status(200).send({ "success": true, "message": "Meal details successfully returned", "meal": res2 });
     });
 };

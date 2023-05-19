@@ -6,6 +6,9 @@ const logger = require('tracer').console()
 const user_controller = require('./controllers/userController');
 const meal_participants_controller = require('./controllers/mealParticipantsController.js');
 
+const auth = require('../utils/auth');
+
+
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
     logger.log(req.originalUrl, 'Time:', Date.now(), 'data:', JSON.stringify(req.body), 'query:', JSON.stringify(req.query), 'params:', JSON.stringify(req.params))
@@ -18,6 +21,10 @@ router.use(function timeLog(req, res, next) {
     }
 
     if ((req._parsedUrl.pathname === "/studenthome" || (req._parsedUrl.pathname.startsWith("/studenthome") && parseInt(req._parsedUrl.pathname.replace("/studenthome/", '')) >= 1)) && req.method === "GET") {
+        return next();
+    }
+
+    if ((req._parsedUrl.pathname === "/meal" || (req._parsedUrl.pathname.startsWith("/meal") && parseInt(req._parsedUrl.pathname.replace("/meal/", '')) >= 1)) && req.method === "GET") {
         return next();
     }
 
@@ -40,9 +47,10 @@ router.use('/', require('./studenthome.js'));
 router.post('/register', user_controller.register);
 router.post('/login', user_controller.login);
 
+router.get('/user', user_controller.users_all_get)
 router.get('/user/profile', user_controller.get_personal_details);
 router.get('/user/:id', user_controller.get_single_user);
-router.put('/user/:id', user_controller.user_update_put);
+router.put('/user/:id', auth.authenticateToken, user_controller.user_update_put);
 router.delete('/user/:id', user_controller.user_delete);
 
 router.get('/:mealId/participants', meal_participants_controller.get_participants_get);

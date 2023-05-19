@@ -20,7 +20,7 @@ router.get('/meal/:mealId', meal_controller.get_meal_details_get);
 router.delete('/meal/:mealId', meal_controller.delete);
 
 router.post('/meal/:mealId/participate', meal_participants_controller.signup_post);
-router.delete('/meal/:mealId/signoff', meal_participants_controller.signoff_put);
+router.delete('/meal/:mealId/participate', meal_participants_controller.signoff_put);
 router.get('/meal/:mealId/participants', meal_participants_controller.get_participants_get);
 router.get('/meal/:mealId/participants/:participantId', meal_participants_controller.get_participant_details_get);
 

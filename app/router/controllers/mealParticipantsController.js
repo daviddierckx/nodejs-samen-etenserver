@@ -1,4 +1,5 @@
 const meals_participants_dao = require('./../../dao/meals_participants_dao');
+const meals_dao = require('./../../dao/meals_dao');
 const request_utils = require('./../../utils/requestUtils');
 const logger = require('tracer').console()
 const users = require('./../../dao/users_dao');
@@ -24,7 +25,7 @@ exports.signup_post = function (req, res) {
                 return res.status(400).send({ "success": false, "error": err2 });
             }
             logger.log("Added to participant reated:", JSON.stringify(res2));
-            return res.status(201).send({ "success": true, "message": "Participant  successfully added", "participant": res2 });
+            return res.status(201).send({ "success": true, "message": `User met ID ${userId} is aangemeld voor maaltijd met ID ${mealId}`, "participant": res2.firstName + " " + res2.lastName });
         });
     });
 };
@@ -41,7 +42,7 @@ exports.signoff_put = function (req, res) {
                 logger.log("Error in user removal:", err);
                 return res.status(404).send({ "success": false, "error": err });
             }
-            return res.status(201).send({ "success": true, "message": "Participant  successfully signed off", "mealId": req.params.mealId, "participant": res3 });
+            return res.status(201).send({ "success": true, "message": `User met ID ${req.user_id} is afgemeld voor maaltijd met ID ${req.params.mealId}`, "participant": res3.firstName + " " + res3.lastName });
         })
     });;
 };
@@ -49,25 +50,53 @@ exports.signoff_put = function (req, res) {
 exports.get_participants_get = function (req, res) {
     logger.log("Received request to get participants of a meal");
 
-
     meals_participants_dao.getAll(req.params.mealId, (err, res2) => {
-        if (err) {
-            logger.log("Error in details:", err);
-            return res.status(404).send({ "success": false, "error": err });
-        }
-        logger.log("Returning all meal participants details:", JSON.stringify(res2));
-        return res.status(200).send({ "success": true, "meal": res2 });
+
+        meals_dao.get(req.params.mealId, (err, res3) => {
+
+            if (err) {
+                logger.log("Error in details:", err);
+                return res.status(404).send({ "success": false, "error": err });
+            }
+
+
+
+
+            if (res3.cookId.toString() !== req.user_id.toString()) {
+                return res.status(403).send({ "success": false, "error": "You are only authorized to view your own meal data, not that of others" });
+            }
+
+
+
+            logger.log("Returning all meal participants details:", JSON.stringify(res2));
+            return res.status(200).send({ "success": true, "message": "Returning all meal participants details", "cookId": res3.cookId, "meal": res2 });
+        })
     });
 };
 
 exports.get_participant_details_get = function (req, res) {
     logger.log("Received request to get meal participant details");
     users.getDetailsParticipant(req.params.mealId, req.params.participantId, (err, res2) => {
-        if (err) {
-            logger.log("Error in details:", err);
-            return res.status(404).send({ "success": false, "error": err });
-        }
-        logger.log("Returning meal participants details:", JSON.stringify(res2));
-        return res.status(200).send({ "success": true, "meal": res2 });
+
+
+        meals_dao.get(req.params.mealId, (err, res3) => {
+
+            if (err) {
+                logger.log("Error in details:", err);
+                return res.status(404).send({ "success": false, "error": err });
+            }
+
+
+
+
+            if (res3.cookId.toString() !== req.user_id.toString()) {
+                return res.status(403).send({ "success": false, "error": "You are only authorized to view your own meal data, not that of others" });
+            }
+
+
+
+            logger.log("Returning meal participants details:", JSON.stringify(res2));
+            return res.status(200).send({ "success": true, "message": "Returning meal participant details", "cookId": res3.cookId, "meal": res2 });
+        })
     });
 };

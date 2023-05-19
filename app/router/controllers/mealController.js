@@ -121,7 +121,7 @@ exports.delete = function (req, res) {
                 return res.status(400).send({ "success": false, "error": err });
             }
             logger.log("Removed meal successfully");
-            return res.status(202).send({ "success": true, "message": "Meal successfully deleted. Deletion confirmed.", "id": res2 });
+            return res.status(202).send({ "success": true, "message": `Maaltijd met ID ${res2} is verwijderd` });
         });
     });
 

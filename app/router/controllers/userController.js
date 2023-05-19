@@ -53,7 +53,6 @@ exports.login = function (req, res, next) {
             logger.log("Error in login:", err2);
             return res.status(400).send({ "success": false, "error": err2 });
         }
-        user = res2.user_id;
 
 
         logger.log("User logged in with token", res2);
@@ -193,7 +192,7 @@ exports.user_delete = function (req, res) {
                 return res.status(400).send({ "success": false, "error": err });
             }
             logger.log("User removed");
-            return res.status(202).send({ "success": true, "message": "User successfully deleted. Deletion confirmed.", "id": res2 });
+            return res.status(202).send({ "success": true, "message": `User met ID ${res2} is verwijderd` });
         });
     });
 

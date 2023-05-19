@@ -76,7 +76,7 @@ exports.getAll = function (name, city, callback) {
 }
 
 exports.getUserById = function (id, callback) {
-    database.con.query('SELECT * FROM user WHERE user.id = ?', [id], function (error, results, fields) {
+    database.con.query('SELECT id,firstName,lastName,isActive,emailAdress,phoneNumber,roles,street,city FROM user WHERE user.id = ?', [id], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
         if (results.length === 0) {
             return callback("user-not-found", undefined);

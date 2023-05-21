@@ -146,7 +146,7 @@ exports.user_update_put = function (req, res) {
     } = req.body;
 
 
-    if (!regexTests.regexTestEmailAddress(req.body.emailAddress)) {
+    if (!regexTests.regexTestEmailAddress(req.body.emailAdress)) {
         return res.status(400).send({ "status": 400, "success": false, "message": `Verplicht veld "emailAddress" ontbreekt`, "data": {} });
     }
     if (!regexTests.passwordRegex(req.body.password)) {

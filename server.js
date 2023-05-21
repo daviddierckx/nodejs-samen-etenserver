@@ -1,7 +1,7 @@
 const port = process.env.PORT || 3000;
 const express = require('express');
 const app = express();
-const routes = require('./app/router/routes')
+const routes = require('./app/router/user.routes')
 const logger = require('tracer').console()
 const bodyParser = require('body-parser');
 const cors = require('cors')

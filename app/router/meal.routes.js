@@ -1,10 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const config = require('./../config');
+const config = require('../config');
 
 const logger = require('tracer').console()
 const jwt = require('jsonwebtoken');
-const studenthome_controller = require('./controllers/studenthomeController.js');
 const meal_controller = require('./controllers/mealController.js');
 const meal_participants_controller = require('./controllers/mealParticipantsController.js');
 

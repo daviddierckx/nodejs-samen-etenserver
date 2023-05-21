@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const config = require('./../config');
+const config = require('../config');
 const jwt = require('jsonwebtoken');
 const logger = require('tracer').console()
 const user_controller = require('./controllers/userController');
@@ -42,7 +42,7 @@ router.use(function timeLog(req, res, next) {
 });
 
 router.use('/info', require('./controllers/info.js'));
-router.use('/', require('./studenthome.js'));
+router.use('/', require('./meal.routes.js'));
 
 router.post('/user', user_controller.register);
 router.post('/login', user_controller.login);

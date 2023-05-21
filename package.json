@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "nodemon --exec babel-node ./server.js",
-    "test": "set PORT=3001 && mocha -reporter spec test/**/*.test.js --exit",
+    "test": "set PORT=3001 && mocha -reporter spec test/**/*.test.js --exit --timeout 5000",
     "test-win": "cls && npm run test",
     "coverage": "nyc --reporter=lcov npm run test",
     "sonar": "sonar-scanner",

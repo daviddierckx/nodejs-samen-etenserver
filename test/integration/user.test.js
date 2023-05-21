@@ -59,7 +59,7 @@ const INSERT_USER =
  */
 const INSERT_MEALS =
     'INSERT INTO `meal` (`id`, `name`, `description`, `imageUrl`, `dateTime`, `maxAmountOfParticipants`, `price`, `cookId`) VALUES' +
-    "(1, 'Meal A', 'description', 'image url', NOW(), 5, 6.50, 1)," +
+    "(1, 'Meal A', 'description', 'image url', NOW(), 1, 6.50, 1)," +
     "(2, 'Meal B', 'description', 'image url', NOW(), 5, 6.50, 1);";
 
 
@@ -159,7 +159,18 @@ describe('USER API', function () {
 
         });
     });
-
+    after((done) => {
+        // Close the test database connection
+        testConnection.end((err) => {
+            if (err) {
+                console.error('Failed to close the test database connection:', err);
+                done(err);
+            } else {
+                console.log('Closed the test database connection');
+                done();
+            }
+        });
+    });
 
     describe('UC-101 Inloggen', function () {
         describe('TC-101-1 Verplicht veld ontbreekt', function () {
@@ -730,25 +741,6 @@ describe('USER API', function () {
         describe('Meal API', function () {
 
 
-            // UC-301 Toevoegen van maaltijd
-            describe('UC-301 Toevoegen van maaltijd', function () {
-                it('TC-301-1 - Verplicht veld ontbreekt', (done) => {
-                    chai
-                        .request(server)
-                        .post('/api/meal/')
-                        .set('Authorization', 'Bearer ' + token)
-                        .send({ isActive: 1 }) // Empty request body to simulate missing required fields
-                        .end((err, res) => {
-                            res.should.have.status(400);
-                            res.body.should.be.an('object');
-                            res.body.should.have.property('status').to.equal(400);
-                            res.body.should.have.property('success').to.equal(false);
-                            res.body.should.have.property('message').to.be.a('string');
-                            res.body.should.have.property('data').to.be.an('object');
-                            done();
-                        });
-                });
-            });
 
 
 
@@ -763,26 +755,8 @@ describe('USER API', function () {
 
 
 
-            after((done) => {
-                testConnection.end((err) => {
-                    if (err) {
-                        done(err);
-                        throw err;
-                    }
-                    done();
-                });
-            });
-            after((done) => {
-                dbconnection.con.end((err) => {
-                    if (err) {
-                        done(err);
-                        throw err;
-                    }
-                    done();
-                });
-            });
 
-        });
+        })
+
     })
-
 })

@@ -69,7 +69,7 @@ exports.login = function (req, res, next) {
             }
 
             logger.log("User logged in with token", res2);
-            return res.status(200).send({ "success": true, "message": "Gebruiker succesvol ingelogd", "token": res2.token, "user_id": res2.user_id });
+            return res.status(200).send({ "status": 200, "success": true, "message": "Gebruiker succesvol ingelogd", "token": res2.token, "user_id": res2.user_id });
         });
     });
 };

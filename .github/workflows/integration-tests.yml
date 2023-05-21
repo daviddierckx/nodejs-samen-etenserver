@@ -2,8 +2,8 @@ name: Run the integration tests
 
 on:
     push:
-        # branches:
-        #     - main
+        branches:
+            - main
 
 jobs:
     integrationtests:
@@ -23,3 +23,14 @@ jobs:
 
             # Run tests
             - run: npm test
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            # Checkout the Repo
+            - uses: actions/checkout@v2
+            - uses: akhileshns/heroku-deploy@v3.12.12
+              with:
+                branch: "main"
+                heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+                heroku_app_name: "share-a-meal-avans"
+                heroku_email: "dierckx24@hotmail.com"

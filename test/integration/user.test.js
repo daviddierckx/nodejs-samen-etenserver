@@ -78,7 +78,6 @@ let gebruikerId;
 
 describe('USER API', function () {
 
-    //TODO
     this.beforeAll((done) => {
         testConnection.connect((err) => {
             if (err) {
@@ -146,9 +145,6 @@ describe('USER API', function () {
                             res.body.should.be.an('object');
                             res.body.should.have.property('message').to.be.equal('Gebruiker succesvol ingelogd');
 
-                            //TODO
-                            // res.body.data.user.should.have.property('user_id');
-                            // res.body.data.should.have.property('token');
                             global.loginToken = res.body.token
                             loginToken = res.body.token
 
@@ -233,9 +229,7 @@ describe('USER API', function () {
                         res.body.should.be.an('object');
                         res.body.should.have.property('message').to.be.equal('Gebruiker succesvol ingelogd');
 
-                        //TODO
-                        // res.body.data.user.should.have.property('user_id');
-                        // res.body.data.should.have.property('token');
+
                         done();
                     });
 

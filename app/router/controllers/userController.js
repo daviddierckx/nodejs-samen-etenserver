@@ -2,6 +2,7 @@ const users_dao = require('./../../dao/users_dao');
 const request_utils = require('./../../utils/requestUtils');
 const logger = require('tracer').console()
 const meals_participants_dao = require('./../../dao/meals_participants_dao');
+const meals_dao = require('./../../dao/meals_dao');
 
 const regexTests = require('./../../utils/regexTests');
 const util = require('util');
@@ -99,7 +100,7 @@ exports.get_single_user = function (req, res) {
             return res.status(404).send({ "status": 404, "message": "Gebruiker-ID bestaat niet", "success": false, "data": {} });
         }
 
-        meals_participants_dao.getAllMealsByUserId(req.params.id, (err, res3) => {
+        meals_dao.getAllMealsByUserId(req.params.id, (err, res3) => {
             if (err) {
                 logger.log("Error in retrieving user meals:", err);
                 return res.status(500).send({ "success": false, "error": "Failed to retrieve user meals" });

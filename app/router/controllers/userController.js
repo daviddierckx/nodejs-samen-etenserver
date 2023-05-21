@@ -164,7 +164,7 @@ exports.user_update_put = function (req, res) {
         return res.status(403).send({ "status": 403, "success": false, "message": "De gebruiker is niet de eigenaar van de data", "data": {} });
     }
 
-    users_dao.getUserByEmail(req.body.emailAddress, (err3, res3) => {
+    users_dao.getUserByEmail(req.body.emailAdress, (err3, res3) => {
         if (err3) {
             return res.status(404).send({ "status": 404, "success": false, "message": "Gebruiker bestaat niet", "data": {} });
         }

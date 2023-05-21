@@ -33,7 +33,7 @@ router.use(function timeLog(req, res, next) {
     console.log("token: ", token);
 
     jwt.verify(token, config.auth.secret, {}, function (err, decoded) {
-        if (err) return res.status(401).send({ "success": false, "error": "Unauthorized" });
+        if (err) return res.status(401).send({ "status": 401, "message": "Ongeldig token", "success": false, "error": "Unauthorized", "data": {} });
         req.user_email = decoded.user_email;
         req.user_id = decoded.user_id;
         logger.log("User authorization success:", JSON.stringify(decoded));

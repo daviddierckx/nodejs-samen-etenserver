@@ -6,16 +6,10 @@ const logger = require('tracer').console()
 
 exports.create_post = function (req, res) {
     logger.log("Received request to create meal");
-    let check = request_utils.verifyBody(req, res, 'name', 'string');
-    check = check && request_utils.verifyBody(req, res, 'description', 'string');
-    check = check && request_utils.verifyBody(req, res, 'price', 'float');
-    check = check && request_utils.verifyBody(req, res, 'allergenes', 'string');
 
-    if (!check) {
-        logger.log("Request cancelled because of an invalid param");
-        return;
+    if (req.body.isActive === undefined || req.body.isVega === undefined || req.body.isVegan === undefined || req.body.isToTakeHome === undefined || req.body.dateTime === undefined || req.body.maxAmountOfParticipants === undefined || req.body.price === undefined || req.body.imageUrl === undefined || req.body.updateDate === undefined || req.body.name === undefined || req.body.description === undefined || req.body.allergenes === undefined) {
+        return res.status(400).send({ "status": 400, "success": false, "message": "Verplicht veld ontbreekt", "data": {} });
     }
-
 
     meals_dao.add({
         isActive: req.body.isActive,

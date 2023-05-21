@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "nodemon --exec babel-node ./server.js",
-    "test": "mocha -reporter spec test/**/*.test.js --exit",
+    "test": "set PORT=3001 && mocha -reporter spec test/**/*.test.js --exit",
     "test-win": "cls && npm run test",
     "coverage": "nyc --reporter=lcov npm run test",
     "sonar": "sonar-scanner",
@@ -39,6 +39,7 @@
     "mysql": "^2.18.1",
     "password-hash": "^1.2.2",
     "sonar-scanner": "^3.1.0",
+    "supertest": "^6.3.3",
     "tracer": "^1.1.4",
     "util": "^0.12.5"
   },

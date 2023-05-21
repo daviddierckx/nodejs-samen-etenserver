@@ -23,6 +23,7 @@ exports.login = function (email, password, callback) {
     const hashed = crypto.createHash('sha256').update(password).digest('base64');
     database.con.query('SELECT * FROM user WHERE emailAdress = ? AND password = ?', [email, hashed], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
+
         if (results.length === 0) {
             return callback("user-login-failed", undefined);
         }
@@ -62,21 +63,30 @@ exports.get = function (id, callback) {
     });
 }
 
-exports.getAll = function (name, city, callback) {
+exports.getAll = function (name, city, isActive, callback) {
     const query_name = `${name || ""}%`;
     const query_city = `${city || ""}%`;
-    database.con.query('SELECT * FROM user WHERE city LIKE ? AND lastName LIKE ?',
-        [query_city, query_name], function (error, results, fields) {
+    const query_isActive = `${isActive || ""}%`;
+    database.con.query('SELECT * FROM user WHERE city LIKE ? AND lastName LIKE ? AND isActive LIKE ?',
+        [query_city, query_name, query_isActive], function (error, results, fields) {
             if (error) return callback(error.sqlMessage, undefined);
-            if (results.length === 0 && (name || city)) {
-                return callback("no-user-matched-criteria", undefined);
-            }
+
             callback(undefined, results);
         });
 }
 
 exports.getUserById = function (id, callback) {
     database.con.query('SELECT id,firstName,lastName,isActive,emailAdress,phoneNumber,roles,street,city FROM user WHERE user.id = ?', [id], function (error, results, fields) {
+        if (error) return callback(error.sqlMessage, undefined);
+        if (results.length === 0) {
+            return callback("user-not-found", undefined);
+        }
+        callback(undefined, results[0]);
+    });
+}
+
+exports.getUserByEmail = function (email, callback) {
+    database.con.query('SELECT id,firstName,lastName,isActive,emailAdress,phoneNumber,roles,street,city FROM user WHERE user.emailAdress = ?', [email], function (error, results, fields) {
         if (error) return callback(error.sqlMessage, undefined);
         if (results.length === 0) {
             return callback("user-not-found", undefined);

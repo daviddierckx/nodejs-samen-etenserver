@@ -19,17 +19,7 @@ app.use(express.json())
 app.use('/api', routes);
 
 
-app.get('/api/info', (req, res) => {
-    logger.log("Get request op /api/info")
 
-    const info = {
-        Studentnaam: 'David Dierckx',
-        Studentnummer: '2179946',
-        Beschrijving: 'Avans hogeschool',
-        SonarqubeURL: 'https://sonarqube.avans-informatica-breda.nl/dashboard?id=nodejs-sameneten'
-    }
-    res.status(200).json(info)
-})
 // Catch-all route
 app.all("*", (req, res, next) => {
     console.log("Catch-all endpoint aangeroepen");
